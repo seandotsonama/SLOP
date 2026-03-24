@@ -483,3 +483,86 @@ SET [VTOTAL_SCORE] = {VMETRIC1} + {VMETRIC2} + {VMETRIC3} + {VMETRIC4} + {VMETRI
 // This sub-step is COMPLETE when VTOTAL_SCORE is set.
 [[ /TASK ]]
 
+
+# STEP 6: Final Summary
+
+|EXECUTE|
+
+// STEP 6 is COMPLETE only when both sub-steps (6.1, 6.2) are COMPLETE.
+// If the reviewer requests adjustments in 6.2, loop back to 6.1 after changes are applied.
+
+
+# STEP 6.1: Present Summary
+
+[[ TASK ]]
+Display the completed rubric table, total score, and an opinion paragraph.
+
+[[ OUTPUT-FORMAT ]]
+
+### Completed Rubric: {VPROJECT_NUMBER}
+
+| # | Metric | Score | Justification |
+|---|---|---|---|
+| 1 | Problem Clarity and Urgency | {VMETRIC1} | <brief justification from scoring> |
+| 2 | Solution Fit and Feasibility | {VMETRIC2} | <brief justification from scoring> |
+| 3 | Market Size and Growth Potential | {VMETRIC3} | <brief justification from scoring> |
+| 4 | Competitive Landscape and Differentiation | {VMETRIC4} | <brief justification from scoring> |
+| 5 | Moat and Defensibility | {VMETRIC5} | <brief justification from scoring> |
+| 6 | Difficulty to Build | {VMETRIC6} | <brief justification from scoring> |
+| 7 | Difficulty to Penetrate Market | {VMETRIC7} | <brief justification from scoring> |
+| 8 | Go-to-Market Clarity | {VMETRIC8} | <brief justification from scoring> |
+| 9 | Studio Fit and Alignment | {VMETRIC9} | <brief justification from scoring> |
+| 10 | Believability and Execution Realism | {VMETRIC10} | <brief justification from scoring> |
+
+**Total Score: {VTOTAL_SCORE} / 50**
+
+[[ /OUTPUT-FORMAT ]]
+
+After the rubric table, draft a brief opinion paragraph (3-5 sentences) covering:
+- The venture's overall promise (if you disagree with the aggregate score, state so)
+- Its most significant challenges (be brutally honest)
+- How difficult it would be to launch or scale from the studio's position (be true and realistic)
+- Any individual metric scores with which you disagree
+
+// This sub-step is COMPLETE once the rubric table, total score, and opinion have been presented.
+[[ /TASK ]]
+
+
+# STEP 6.2: Adjustment Gate
+
+[[ TASK ]]
+Ask the reviewer if they are satisfied with the rubric and summary.
+
+Present a `single_select` widget using `ask_user_input_v0`:
+
+Question: `"Do you want to make any changes?"`
+
+Options:
+- `"I am satisfied with the rubric and summary"`
+- `"I want to make adjustments"`
+
+!STOP! until the reviewer selects an option.
+
+### If the reviewer selects "I am satisfied"
+
+Mark this sub-step COMPLETE. Proceed to STEP 7.
+
+### If the reviewer selects "I want to make adjustments"
+
+!LOOP!
+
+Ask the reviewer which metric(s) they want to change. Present each adjusted metric as a `single_select` widget with score options 0-5.
+
+For each adjusted metric:
+- Update the corresponding SET [VMETRIC<N>] = <new score>
+- Recalculate: SET [VTOTAL_SCORE] = {VMETRIC1} + {VMETRIC2} + {VMETRIC3} + {VMETRIC4} + {VMETRIC5} + {VMETRIC6} + {VMETRIC7} + {VMETRIC8} + {VMETRIC9} + {VMETRIC10}
+
+After adjustments are applied, re-present the updated rubric table and total score (repeat STEP 6.1 format).
+
+Then re-ask: `"Do you want to make any changes?"`
+- If satisfied: !DONE! Mark this sub-step COMPLETE. Proceed to STEP 7.
+- If more adjustments: continue the !LOOP!.
+
+// This sub-step is COMPLETE when the reviewer confirms they are satisfied.
+[[ /TASK ]]
+
