@@ -1,4 +1,4 @@
-# SLOP v1.4
+# SLOP v1.5
 ## Simple Language Of Prompting
 
 *A self-bootstrapping session metalanguage for LLM interaction*
@@ -53,10 +53,11 @@ https://automationnavigator.substack.com/p/ai-slop-simple-language-of-prompting
 
 ```
 SLOP/
-├── README.md                                    ← this file (v1.4 spec + documentation)
+├── README.md                                    ← this file (v1.5 spec + documentation)
 ├── SLOP-v1.2.slp                                ← legacy spec (v1.2)
 ├── SLOP-v1.3.slp                                ← legacy spec (v1.3, full color reference)
-├── SLOP-v1.4.slp                                ← current spec (v1.4, Dark/Light colors)
+├── SLOP-v1.4.slp                                ← legacy spec (v1.4, Dark/Light colors)
+├── SLOP-v1.5.slp                                ← current spec (v1.5, expanded header)
 ├── examples/
 │   └── Venture_Reviewer_V200_SLOP.slp           ← complete 7-step example (26KB)
 └── vscode-slop/
@@ -64,7 +65,7 @@ SLOP/
     ├── language-configuration.json
     ├── README.md
     ├── syntaxes/
-    │   └── slop.tmLanguage.json                 ← TextMate grammar (v1.4 bracket regex)
+    │   └── slop.tmLanguage.json                 ← TextMate grammar (v1.5 section labels)
     └── themes/
         ├── slop-dark.json
         └── slop-light.json
@@ -74,7 +75,7 @@ SLOP/
 
 ## Bracket Types
 
-SLOP v1.4 uses three distinct bracket types. Each shape has exactly one meaning.
+SLOP v1.5 uses three distinct bracket types. Each shape has exactly one meaning.
 
 | Bracket | Name | Purpose | Example |
 |---|---|---|---|
@@ -128,9 +129,9 @@ Paste this block at the top of any session to activate SLOP. The model reads it 
 applies the rules for the remainder of the session.
 
 ```
-[[ SLOP v1.4 ]]
+[[ SLOP v1.5 ]]
 
-You are now operating under SLOP v1.4 (Simple Language of Prompting).
+You are now operating under SLOP v1.5 (Simple Language of Prompting).
 Read and internalize this entire block before responding to anything.
 Apply these rules for the remainder of the session unless explicitly instructed otherwise.
 
@@ -143,6 +144,12 @@ Process prompt content in this priority order:
   5. TASK block — what to do within the current step
   6. INPUT block — the data or content to work with
   7. OUTPUT-FORMAT block — how to structure the response
+
+BRACKET TYPES
+  [[ ]]  = block delimiters. Wrap sections of a prompt.
+  [ ]    = variable names in SET, RECALL, and DEFAULT: commands.
+  { }    = inline variable substitution. Replaced with the current value at runtime.
+  < >    = placeholders in schema definitions only. Not used in actual prompts.
 
 HEADING WEIGHT
   # H1  = session-level directive or STEP declaration. Highest weight.
@@ -157,18 +164,29 @@ INLINE EMPHASIS
 
 BLOCK DELIMITERS
   Blocks wrap distinct sections. Always include an opening and closing tag.
+  Closing tag uses a forward slash: [[ /BLOCK ]]
   Blocks are processed according to PARSING ORDER above, not document position.
+  Known block types: VARS, ROLE, TASK, CONSTRAINTS, INPUT, OUTPUT-FORMAT, EXAMPLE, NOTE.
 
 CONTROL KEYWORDS
-  !STOP!             = Do not proceed unless the stated condition is true. Halt and report if false.
-  !GATE!             = Evaluate a condition. If false, pause and ask the user to resolve before continuing.
-  !GATE! GOTO: STEP N = If the gate condition is met, jump to the specified step. Skipped steps
-                        are marked BYPASSED and may be resumed later.
-  !CONFIRM!          = Pause and ask the user to approve before executing the next block.
-  !ASSUME!           = Treat the stated condition as true without requiring user confirmation.
-  !LOOP!             = Repeat the enclosing block until !DONE! is received or a !GATE! condition is met.
-  !DONE!             = Terminate an active !LOOP!.
-  !IGNORE!           = Suppress a default model behavior for this session.
+  !STOP!               = Do not proceed unless the stated condition is true. Halt and report if false.
+  !GATE!               = Evaluate a condition. If false, pause and ask the user to resolve before continuing.
+  !GATE! GOTO: STEP N  = If the gate condition is met, jump to the specified step. Skipped steps
+                          are marked BYPASSED and may be resumed later.
+  !CONFIRM!            = Pause and ask the user to approve before executing the next block.
+  !ASSUME!             = Treat the stated condition as true without requiring user confirmation.
+  !LOOP!               = Repeat the enclosing block until !DONE! is received or a !GATE! condition is met.
+  !DONE!               = Terminate an active !LOOP!.
+  !IGNORE!             = Suppress a default model behavior for this session.
+
+STATUS COMMAND
+  The user may type STATUS at any point to request a state report of all steps.
+  Respond with each step's current state: PENDING, ACTIVE, COMPLETE, or BYPASSED.
+  Show sub-steps indented under their parent step.
+
+RESUME COMMAND
+  RESUME: STEP N THEN GOTO: STEP M  = Resume a BYPASSED step, then jump to step M after it completes.
+  RESUME: STEP N THEN CONTINUE      = Resume a BYPASSED step, then continue sequentially from that point.
 
 MODE DECLARATIONS
   Declare one of the following as a standalone line. Default is |EXECUTE| if none is declared.
@@ -185,8 +203,6 @@ STEP EXECUTION RULES
   You may not advance to the next step until all conditions in the current step are satisfied.
   You may not skip a step except via !GATE! GOTO:.
   Steps carry one of four states: PENDING, ACTIVE, COMPLETE, BYPASSED.
-  A step marked BYPASSED may be resumed using RESUME: STEP N THEN GOTO: STEP N
-  or RESUME: STEP N THEN CONTINUE.
 
 SUB-STEP RULES
   Sub-steps use decimal notation: # STEP N.M: [title]
@@ -199,14 +215,18 @@ SUB-STEP RULES
   Sub-steps are optional. Steps without internal phases do not require them.
 
 VARIABLE COMMANDS
-  SET [<n>] = <value>    Store a named value for use throughout this session.
-  RECALL [<n>]           Read and apply the current value of a named variable.
+  SET [<n>] = <value>      Store a named value for use throughout this session.
+  RECALL [<n>]             Read and apply the current value of a named variable.
   DEFAULT: [<n>] = <value> Use this value if the variable is not explicitly set.
 
 VARIABLE REFERENCES
   Use {VAR_NAME} anywhere in a prompt or block to substitute the current value.
 
-[[ /SLOP v1.4 ]]
+COMMENTS
+  // Lines beginning with double slashes are comments.
+  Comments are ignored by the model. They exist for human readers only.
+
+[[ /SLOP v1.5 ]]
 ```
 
 ---
@@ -228,7 +248,7 @@ The closing tag uses a forward slash: `[[ /BLOCK ]]`
 | `[[ OUTPUT-FORMAT ]]` | Structure, length, and style of the response. | ![#1589F0](https://placehold.co/15x15/1589F0/1589F0.png) `#1589F0` | ![#1270C0](https://placehold.co/15x15/1270C0/1270C0.png) `#1270C0` |
 | `[[ EXAMPLE ]]` | Reference sample. Do not execute. Model the output after this. | ![#1589F0](https://placehold.co/15x15/1589F0/1589F0.png) `#1589F0` | ![#1270C0](https://placehold.co/15x15/1270C0/1270C0.png) `#1270C0` |
 | `[[ NOTE ]]` | Low-weight background context. Apply if relevant, do not prioritize. | ![#1589F0](https://placehold.co/15x15/1589F0/1589F0.png) `#1589F0` | ![#1270C0](https://placehold.co/15x15/1270C0/1270C0.png) `#1270C0` |
-| `[[ SLOP v1.4 ]]` | Schema header. Contains the full rule set for the session. | ![#1589F0](https://placehold.co/15x15/1589F0/1589F0.png) `#1589F0` | ![#1270C0](https://placehold.co/15x15/1270C0/1270C0.png) `#1270C0` |
+| `[[ SLOP v1.5 ]]` | Schema header. Contains the full rule set for the session. | ![#1589F0](https://placehold.co/15x15/1589F0/1589F0.png) `#1589F0` | ![#1270C0](https://placehold.co/15x15/1270C0/1270C0.png) `#1270C0` |
 
 ---
 
@@ -495,9 +515,9 @@ SET [AUDIENCE] = plant floor operators
 ## Full Session Template
 
 ```
-[[ SLOP v1.4 ]]
+[[ SLOP v1.5 ]]
 {paste schema header here}
-[[ /SLOP v1.4 ]]
+[[ /SLOP v1.5 ]]
 
 [[ VARS ]]
 CLIENT        =
@@ -612,6 +632,7 @@ The `vscode-slop/` directory contains a VS Code extension with syntax highlighti
 | v1.2 | 2026-03-23 | Added STEP system with four states. Added `!GATE! GOTO:`, RESUME, and STATUS commands. |
 | v1.3 | 2026-03-24 | Added sub-step system with decimal notation (`STEP N.M`). Parent COMPLETE requires all sub-steps COMPLETE. `!GATE! GOTO:` targets sub-steps. VS Code extension with Dark and Light themes. |
 | v1.4 | 2026-03-24 | Variable names in commands now wrapped in brackets: `SET [VAR] = value`, `RECALL [VAR]`, `DEFAULT: [VAR] = value`. Three distinct bracket types: `[[ ]]` blocks, `[ ]` variable names, `{ }` substitution. Schema definition placeholders use angle brackets `<n>`. Completed Venture Reviewer example (7 steps, 26KB). |
+| v1.5 | 2026-03-24 | Expanded schema header with BRACKET TYPES (documents all four bracket shapes), COMMENTS (// syntax), STATUS COMMAND, and RESUME COMMAND as standalone sections. Block types now enumerated in BLOCK DELIMITERS section. All features documented in the full spec are now present in the copy-paste header block. |
 
 ---
 
