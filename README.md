@@ -1,5 +1,5 @@
 # SLOP v1.3
-## Simple Language of Prompting
+## Simple Language Of Prompting
 
 *A self-bootstrapping session metalanguage for LLM interaction*
 *Sean Dotson, Mar 23, 2026 - sean@automationama.com*
@@ -7,7 +7,7 @@ https://github.com/seandotsonama/SLOP
 
 ---
 
-## What Is SLOP
+## What Is S.L.O.P. (Simple Language Of Prompting)
 
 SLOP is a plain-text prompt schema designed to be pasted at the start of any LLM session.
 It defines its own rules inline, so the model learns the language from the document itself.
