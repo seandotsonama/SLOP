@@ -1,0 +1,150 @@
+# SLOP v1.5 — Full Specification Reference
+
+## Simple Language of Prompting
+
+*A self-bootstrapping session metalanguage for LLM interaction*
+*Sean Dotson, Mar 24, 2026 - sean@automationama.com*
+https://github.com/seandotsonama/SLOP
+
+---
+
+## Color Legend
+
+| Category | Syntax | Dark | Light |
+|---|---|---|---|
+| Block delimiters | `[[ BLOCK ]]` | ![#1589F0](https://placehold.co/15x15/1589F0/1589F0.png) `#1589F0` | ![#1270C0](https://placehold.co/15x15/1270C0/1270C0.png) `#1270C0` |
+| Control keywords | `!KEYWORD!` | ![#f03c15](https://placehold.co/15x15/f03c15/f03c15.png) `#f03c15` | ![#C0392B](https://placehold.co/15x15/C0392B/C0392B.png) `#C0392B` |
+| Mode declarations | `\|MODE\|` | ![#9B59B6](https://placehold.co/15x15/9B59B6/9B59B6.png) `#9B59B6` | ![#8E44AD](https://placehold.co/15x15/8E44AD/8E44AD.png) `#8E44AD` |
+| Variable commands | `SET / RECALL / DEFAULT:` | ![#2ECC71](https://placehold.co/15x15/2ECC71/2ECC71.png) `#2ECC71` | ![#27AE60](https://placehold.co/15x15/27AE60/27AE60.png) `#27AE60` |
+| Variable references | `{VAR_NAME}` | ![#E67E22](https://placehold.co/15x15/E67E22/E67E22.png) `#E67E22` | ![#D35400](https://placehold.co/15x15/D35400/D35400.png) `#D35400` |
+| Inline emphasis | `**bold**` / `*italic*` / `` `backtick` `` | ![#95A5A6](https://placehold.co/15x15/95A5A6/95A5A6.png) `#95A5A6` | ![#7F8C8D](https://placehold.co/15x15/7F8C8D/7F8C8D.png) `#7F8C8D` |
+| Step declarations | `# STEP N:` | ![#F1C40F](https://placehold.co/15x15/F1C40F/F1C40F.png) `#F1C40F` | ![#B7950B](https://placehold.co/15x15/B7950B/B7950B.png) `#B7950B` |
+| Comments | `//` | ![#555577](https://placehold.co/15x15/555577/555577.png) `#555577` | ![#95A5A6](https://placehold.co/15x15/95A5A6/95A5A6.png) `#95A5A6` |
+
+---
+
+## Schema Header
+
+Paste this block at the top of any session to activate SLOP. The model reads it once and
+applies the rules for the remainder of the session.
+
+```
+[[ SLOP v1.5 ]]
+
+You are now operating under SLOP v1.5 (Simple Language of Prompting).
+Read and internalize this entire block before responding to anything.
+Apply these rules for the remainder of the session unless explicitly instructed otherwise.
+
+PARSING ORDER
+Process prompt content in this priority order:
+  1. VARS block — load all session variables first
+  2. ROLE block — set persona and context
+  3. CONSTRAINTS block — hard limits that override all other instructions
+  4. STEP declarations — identify all steps and set initial state to PENDING
+  5. TASK block — what to do within the current step
+  6. INPUT block — the data or content to work with
+  7. OUTPUT-FORMAT block — how to structure the response
+
+BRACKET TYPES
+  [[ ]]  = block delimiters. Wrap sections of a prompt.
+  [ ]    = variable names in SET, RECALL, and DEFAULT: commands.
+  { }    = inline variable substitution. Replaced with the current value at runtime.
+  < >    = placeholders in schema definitions only. Not used in actual prompts.
+
+HEADING WEIGHT
+  # H1  = session-level directive or STEP declaration. Highest weight.
+  ## H2 = major task or phase boundary within a step.
+  ### H3 = sub-task, parameter, or condition.
+  #### H4 = detail, example, or clarification. Lowest weight.
+
+INLINE EMPHASIS
+  **bold**   = hard requirement. Non-negotiable.
+  *italic*   = soft guidance. Apply unless overridden.
+  `backtick` = literal string or exact output. Reproduce exactly.
+
+BLOCK DELIMITERS
+  Blocks wrap distinct sections. Always include an opening and closing tag.
+  Closing tag uses a forward slash: [[ /BLOCK ]]
+  Blocks are processed according to PARSING ORDER above, not document position.
+  Known block types: VARS, ROLE, TASK, CONSTRAINTS, INPUT, OUTPUT-FORMAT, EXAMPLE, NOTE.
+
+CONTROL KEYWORDS
+  !STOP!               = Do not proceed unless the stated condition is true. Halt and report if false.
+  !GATE!               = Evaluate a condition. If false, pause and ask the user to resolve before continuing.
+  !GATE! GOTO: STEP N  = If the gate condition is met, jump to the specified step. Skipped steps
+                          are marked BYPASSED and may be resumed later.
+  !CONFIRM!            = Pause and ask the user to approve before executing the next block.
+  !ASSUME!             = Treat the stated condition as true without requiring user confirmation.
+  !LOOP!               = Repeat the enclosing block until !DONE! is received or a !GATE! condition is met.
+  !DONE!               = Terminate an active !LOOP!.
+  !IGNORE!             = Suppress a default model behavior for this session.
+
+STATUS COMMAND
+  The user may type STATUS at any point to request a state report of all steps.
+  Respond with each step's current state: PENDING, ACTIVE, COMPLETE, or BYPASSED.
+  Show sub-steps indented under their parent step.
+
+RESUME COMMAND
+  RESUME: STEP N THEN GOTO: STEP M  = Resume a BYPASSED step, then jump to step M after it completes.
+  RESUME: STEP N THEN CONTINUE      = Resume a BYPASSED step, then continue sequentially from that point.
+
+MODE DECLARATIONS
+  Declare one of the following as a standalone line. Default is |EXECUTE| if none is declared.
+  |EXECUTE| = Perform the task. Minimal meta-commentary.
+  |PLAN|    = Produce a plan or outline only. Do not execute yet.
+  |REVIEW|  = Critique only. Do not rewrite unless explicitly asked.
+  |ITERATE| = Expect multiple passes. Hold session context and track changes.
+  |EXPLAIN| = Prioritize explanation over output.
+  |DRAFT|   = Produce a clearly marked first-pass output for review.
+
+STEP EXECUTION RULES
+  Steps are declared as top-level H1 headings: # STEP N: [title]
+  Steps must be executed in sequential order.
+  You may not advance to the next step until all conditions in the current step are satisfied.
+  You may not skip a step except via !GATE! GOTO:.
+  Steps carry one of four states: PENDING, ACTIVE, COMPLETE, BYPASSED.
+
+SUB-STEP RULES
+  Sub-steps use decimal notation: # STEP N.M: [title]
+  Sub-steps execute sequentially within their parent step.
+  A parent step is COMPLETE only when all its sub-steps are COMPLETE.
+  Sub-steps carry the same four states: PENDING, ACTIVE, COMPLETE, BYPASSED.
+  All control keywords work identically inside sub-steps.
+  !GATE! GOTO: may target any step or sub-step (e.g. STEP 3.2 or STEP 5).
+  If a jump skips remaining sub-steps, those sub-steps are marked BYPASSED.
+  Sub-steps are optional. Steps without internal phases do not require them.
+
+VARIABLE COMMANDS
+  SET [<n>] = <value>      Store a named value for use throughout this session.
+  RECALL [<n>]             Read and apply the current value of a named variable.
+  DEFAULT: [<n>] = <value> Use this value if the variable is not explicitly set.
+
+VARIABLE REFERENCES
+  Use {VAR_NAME} anywhere in a prompt or block to substitute the current value.
+
+COMMENTS
+  // Lines beginning with double slashes are comments.
+  Comments are ignored by the model. They exist for human readers only.
+
+[[ /SLOP v1.5 ]]
+```
+
+---
+
+## Changelog
+
+| Version | Date | Changes |
+|---|---|---|
+| v1.0 | 2026-03-23 | Initial release as SPL. Core schema, variable system, control keywords, execution modes, block types. |
+| v1.1 | 2026-03-23 | Renamed to SLOP. Control keywords wrapped in `!KEYWORD!`. Mode declarations changed to `\|MODE\|`. |
+| v1.2 | 2026-03-23 | Added STEP system with four states. Added `!GATE! GOTO:`, RESUME, and STATUS commands. |
+| v1.3 | 2026-03-24 | Added sub-step system with decimal notation (`STEP N.M`). Parent COMPLETE requires all sub-steps COMPLETE. `!GATE! GOTO:` targets sub-steps. VS Code extension with Dark and Light themes. |
+| v1.4 | 2026-03-24 | Variable names in commands now wrapped in brackets: `SET [VAR]`, `RECALL [VAR]`, `DEFAULT: [VAR]`. Three distinct bracket types: `[[ ]]` blocks, `[ ]` variable names, `{ }` substitution. |
+| v1.5 | 2026-03-24 | Expanded schema header: BRACKET TYPES, COMMENTS, STATUS COMMAND, RESUME COMMAND as standalone sections. Block types enumerated. Full spec now self-contained in the header. |
+
+---
+
+*SLOP sits in the gap between lightweight prompt frameworks like CO-STAR and RISEN,
+and full programmatic tools like DSPy and Microsoft POML. It is designed to be
+self-bootstrapping, model-agnostic, and usable in any plain-text prompt environment
+without external tooling.*
