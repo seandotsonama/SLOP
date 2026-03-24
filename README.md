@@ -1,4 +1,4 @@
-# SLOP v1.2
+# SLOP v1.3
 ## Simple Language of Prompting
 
 *A self-bootstrapping session metalanguage for LLM interaction*
@@ -239,9 +239,9 @@ Paste this block at the top of any session to activate SLOP. The model reads it 
 applies the rules for the remainder of the session.
 
 ```
-[[ SLOP v1.2 ]]
+[[ SLOP v1.3 ]]
 
-You are now operating under SLOP v1.2 (Simple Language of Prompting).
+You are now operating under SLOP v1.3 (Simple Language of Prompting).
 Read and internalize this entire block before responding to anything.
 Apply these rules for the remainder of the session unless explicitly instructed otherwise.
 
@@ -299,6 +299,16 @@ STEP EXECUTION RULES
   A step marked BYPASSED may be resumed using RESUME: STEP N THEN GOTO: STEP N
   or RESUME: STEP N THEN CONTINUE.
 
+SUB-STEP RULES
+  Sub-steps use decimal notation: # STEP N.M: [title]
+  Sub-steps execute sequentially within their parent step.
+  A parent step is COMPLETE only when all its sub-steps are COMPLETE.
+  Sub-steps carry the same four states: PENDING, ACTIVE, COMPLETE, BYPASSED.
+  All control keywords work identically inside sub-steps.
+  !GATE! GOTO: may target any step or sub-step (e.g. STEP 3.2 or STEP 5).
+  If a jump skips remaining sub-steps, those sub-steps are marked BYPASSED.
+  Sub-steps are optional. Steps without internal phases do not require them.
+
 VARIABLE COMMANDS
   SET [VAR] = [value]    Store a named value for use throughout this session.
   RECALL [VAR]           Read and apply the current value of a named variable.
@@ -307,7 +317,7 @@ VARIABLE COMMANDS
 VARIABLE REFERENCES
   Use {VAR_NAME} anywhere in a prompt or block to substitute the current value.
 
-[[ /SLOP v1.2 ]]
+[[ /SLOP v1.3 ]]
 ```
 
 ---
@@ -329,7 +339,7 @@ The closing tag uses a forward slash: `[[ /BLOCK ]]`
 | ![#1589F0](https://placehold.co/15x15/1589F0/1589F0.png) | `[[ OUTPUT-FORMAT ]]` | Structure, length, and style of the response. |
 | ![#1589F0](https://placehold.co/15x15/1589F0/1589F0.png) | `[[ EXAMPLE ]]` | Reference sample. Do not execute. Model the output after this. |
 | ![#1589F0](https://placehold.co/15x15/1589F0/1589F0.png) | `[[ NOTE ]]` | Low-weight background context. Apply if relevant, do not prioritize. |
-| ![#1589F0](https://placehold.co/15x15/1589F0/1589F0.png) | `[[ SLOP v1.2 ]]` | Schema header. Contains the full rule set for the session. |
+| ![#1589F0](https://placehold.co/15x15/1589F0/1589F0.png) | `[[ SLOP v1.3 ]]` | Schema header. Contains the full rule set for the session. |
 
 ---
 
@@ -371,6 +381,47 @@ A short descriptive title should follow the step number.
 # STEP 3: Generate Draft
 # STEP 4: Review and Approve
 # STEP 5: Deliver Output
+```
+
+### Sub-Steps
+
+Sub-steps break a parent step into ordered internal phases using decimal notation.
+Use them when a step contains multiple sequential operations that benefit from independent
+state tracking, gating, or status reporting.
+
+#### Sub-Step Declaration
+
+Sub-steps are declared as H1 headings with decimal numbering. The parent step number
+comes first, followed by a dot and the sub-step number starting at 1.
+
+```
+# STEP 2: Venture Retrieval
+# STEP 2.1: Fetch Task List
+# STEP 2.2: Filter Scored Ventures
+# STEP 2.3: Present Selection
+```
+
+#### Sub-Step Rules
+
+- Sub-steps execute sequentially within their parent step.
+- A parent step is COMPLETE only when all of its sub-steps are COMPLETE.
+- Sub-steps carry the same four states as top-level steps: PENDING, ACTIVE, COMPLETE, BYPASSED.
+- All control keywords (![#f03c15](https://placehold.co/15x15/f03c15/f03c15.png) `!STOP!`, ![#f03c15](https://placehold.co/15x15/f03c15/f03c15.png) `!GATE!`, ![#f03c15](https://placehold.co/15x15/f03c15/f03c15.png) `!GATE! GOTO:`) work identically inside sub-steps.
+- ![#f03c15](https://placehold.co/15x15/f03c15/f03c15.png) `!GATE! GOTO:` may target any step or sub-step (e.g. `STEP 3.2` or `STEP 5`).
+- If a jump skips remaining sub-steps, those sub-steps are marked BYPASSED.
+- Sub-steps are optional. Steps without internal phases do not require them.
+
+#### STATUS with Sub-Steps
+
+When sub-steps are present, the STATUS report shows them indented under their parent.
+
+```
+STEP 1: Reviewer Identification     [COMPLETE]
+STEP 2: Venture Retrieval           [ACTIVE]
+  STEP 2.1: Fetch Task List         [COMPLETE]
+  STEP 2.2: Filter Scored Ventures  [ACTIVE]
+  STEP 2.3: Present Selection       [PENDING]
+STEP 3: Proposal Retrieval          [PENDING]
 ```
 
 ### Step States
@@ -548,9 +599,9 @@ SET AUDIENCE = plant floor operators
 ## Full Session Template
 
 ```
-[[ SLOP v1.2 ]]
+[[ SLOP v1.3 ]]
 {paste schema header here}
-[[ /SLOP v1.2 ]]
+[[ /SLOP v1.3 ]]
 
 [[ VARS ]]
 CLIENT        =
@@ -588,6 +639,14 @@ MAX_LENGTH    =
 [[ /OUTPUT-FORMAT ]]
 
 # STEP 2: [title]
+
+# STEP 2.1: [sub-step title]
+
+[[ TASK ]]
+
+[[ /TASK ]]
+
+# STEP 2.2: [sub-step title]
 
 [[ TASK ]]
 
@@ -629,6 +688,7 @@ MAX_LENGTH    =
 | v1.0 | 2026-03-23 | Initial release as SPL. Core schema, variable system, control keywords, execution modes, block types. |
 | v1.1 | 2026-03-23 | Renamed to SLOP (Simple Language of Prompting). Control keywords wrapped in `!KEYWORD!`. Mode declarations changed to `\|MODE\|` with no prefix. Double brackets retained for blocks. |
 | v1.2 | 2026-03-23 | Added STEP system. Sequential execution units with four states: PENDING, ACTIVE, COMPLETE, BYPASSED. Added ![#f03c15](https://placehold.co/15x15/f03c15/f03c15.png) `!GATE! GOTO:` for non-sequential jumps. Added RESUME command with THEN GOTO: and THEN CONTINUE options. Added STATUS command for step state reporting. |
+| v1.3 | 2026-03-24 | Added sub-step system. Decimal notation (`STEP N.M`) for ordered internal phases within a parent step. Sub-steps inherit all step rules, states, and control keywords. Parent step is COMPLETE only when all sub-steps are COMPLETE. ![#f03c15](https://placehold.co/15x15/f03c15/f03c15.png) `!GATE! GOTO:` may target sub-steps directly. STATUS report shows sub-steps indented under parent. |
 
 ---
 

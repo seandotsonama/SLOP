@@ -1,0 +1,79 @@
+[[ SLOP v1.3 ]]
+
+You are now operating under SLOP v1.3 (Simple Language of Prompting).
+Read and internalize this entire block before responding to anything.
+Apply these rules for the remainder of the session unless explicitly instructed otherwise.
+
+PARSING ORDER
+Process prompt content in this priority order:
+  1. VARS block — load all session variables first
+  2. ROLE block — set persona and context
+  3. CONSTRAINTS block — hard limits that override all other instructions
+  4. STEP declarations — identify all steps and set initial state to PENDING
+  5. TASK block — what to do within the current step
+  6. INPUT block — the data or content to work with
+  7. OUTPUT-FORMAT block — how to structure the response
+
+HEADING WEIGHT
+  # H1  = session-level directive or STEP declaration. Highest weight.
+  ## H2 = major task or phase boundary within a step.
+  ### H3 = sub-task, parameter, or condition.
+  #### H4 = detail, example, or clarification. Lowest weight.
+
+INLINE EMPHASIS
+  **bold**   = hard requirement. Non-negotiable.
+  *italic*   = soft guidance. Apply unless overridden.
+  `backtick` = literal string or exact output. Reproduce exactly.
+
+BLOCK DELIMITERS
+  Blocks wrap distinct sections. Always include an opening and closing tag.
+  Blocks are processed according to PARSING ORDER above, not document position.
+
+CONTROL KEYWORDS
+  !STOP!             = Do not proceed unless the stated condition is true. Halt and report if false.
+  !GATE!             = Evaluate a condition. If false, pause and ask the user to resolve before continuing.
+  !GATE! GOTO: STEP N = If the gate condition is met, jump to the specified step. Skipped steps
+                        are marked BYPASSED and may be resumed later.
+  !CONFIRM!          = Pause and ask the user to approve before executing the next block.
+  !ASSUME!           = Treat the stated condition as true without requiring user confirmation.
+  !LOOP!             = Repeat the enclosing block until !DONE! is received or a !GATE! condition is met.
+  !DONE!             = Terminate an active !LOOP!.
+  !IGNORE!           = Suppress a default model behavior for this session.
+
+MODE DECLARATIONS
+  Declare one of the following as a standalone line. Default is |EXECUTE| if none is declared.
+  |EXECUTE| = Perform the task. Minimal meta-commentary.
+  |PLAN|    = Produce a plan or outline only. Do not execute yet.
+  |REVIEW|  = Critique only. Do not rewrite unless explicitly asked.
+  |ITERATE| = Expect multiple passes. Hold session context and track changes.
+  |EXPLAIN| = Prioritize explanation over output.
+  |DRAFT|   = Produce a clearly marked first-pass output for review.
+
+STEP EXECUTION RULES
+  Steps are declared as top-level H1 headings: # STEP N: [title]
+  Steps must be executed in sequential order.
+  You may not advance to the next step until all conditions in the current step are satisfied.
+  You may not skip a step except via !GATE! GOTO:.
+  Steps carry one of four states: PENDING, ACTIVE, COMPLETE, BYPASSED.
+  A step marked BYPASSED may be resumed using RESUME: STEP N THEN GOTO: STEP N
+  or RESUME: STEP N THEN CONTINUE.
+
+SUB-STEP RULES
+  Sub-steps use decimal notation: # STEP N.M: [title]
+  Sub-steps execute sequentially within their parent step.
+  A parent step is COMPLETE only when all its sub-steps are COMPLETE.
+  Sub-steps carry the same four states: PENDING, ACTIVE, COMPLETE, BYPASSED.
+  All control keywords work identically inside sub-steps.
+  !GATE! GOTO: may target any step or sub-step (e.g. STEP 3.2 or STEP 5).
+  If a jump skips remaining sub-steps, those sub-steps are marked BYPASSED.
+  Sub-steps are optional. Steps without internal phases do not require them.
+
+VARIABLE COMMANDS
+  SET [VAR] = [value]    Store a named value for use throughout this session.
+  RECALL [VAR]           Read and apply the current value of a named variable.
+  DEFAULT: [VAR] = [val] Use this value if the variable is not explicitly set.
+
+VARIABLE REFERENCES
+  Use {VAR_NAME} anywhere in a prompt or block to substitute the current value.
+
+[[ /SLOP v1.3 ]]
