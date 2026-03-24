@@ -49,6 +49,46 @@ https://automationnavigator.substack.com/p/ai-slop-simple-language-of-prompting
 
 ---
 
+## Repository Structure
+
+```
+SLOP/
+├── README.md                                    ← this file (v1.4 spec + documentation)
+├── SLOP-v1.2.slp                                ← legacy spec (v1.2)
+├── SLOP-v1.3.slp                                ← legacy spec (v1.3, full color reference)
+├── SLOP-v1.4.slp                                ← current spec (v1.4, Dark/Light colors)
+├── examples/
+│   └── Venture_Reviewer_V200_SLOP.slp           ← complete 7-step example (26KB)
+└── vscode-slop/
+    ├── package.json
+    ├── language-configuration.json
+    ├── README.md
+    ├── syntaxes/
+    │   └── slop.tmLanguage.json                 ← TextMate grammar (v1.4 bracket regex)
+    └── themes/
+        ├── slop-dark.json
+        └── slop-light.json
+```
+
+---
+
+## Bracket Types
+
+SLOP v1.4 uses three distinct bracket types. Each shape has exactly one meaning.
+
+| Bracket | Name | Purpose | Example |
+|---|---|---|---|
+| `[[ ]]` | Double brackets | Block delimiters | `[[ TASK ]]` ... `[[ /TASK ]]` |
+| `[ ]` | Single brackets | Variable names in commands | `SET [VMODE] = 1`, `RECALL [REVIEWER_FIELD_ID]` |
+| `{ }` | Curly braces | Inline variable substitution | `Draft a summary for {CLIENT}` |
+
+In schema definitions (the header block), angle brackets `< >` denote placeholders:
+`SET [<n>] = <value>` means "replace `<n>` with your variable name and `<value>` with the actual value."
+
+In actual usage: `SET [VMODE] = 1`
+
+---
+
 ## Color Legend
 
 Each SLOP syntax category is color-coded throughout this document for quick visual scanning.
@@ -517,6 +557,26 @@ MAX_LENGTH    =
 
 ---
 
+## Examples
+
+### Venture Reviewer (complete, production-grade)
+
+[`examples/Venture_Reviewer_V200_SLOP.slp`](examples/Venture_Reviewer_V200_SLOP.slp) is a full 7-step SLOP prompt that guides a reviewer through a structured venture evaluation using ClickUp and Google Drive integrations.
+
+| Step | Name | Sub-steps | Features Used |
+|---|---|---|---|
+| 1 | Reviewer Identification | none | `!STOP!`, `SET`, identity map via comments |
+| 2 | Venture List Retrieval | 2.1, 2.2, 2.3 | `!GATE!`, `!STOP!`, `!IGNORE!`, ClickUp API, `RECALL` |
+| 3 | Proposal Retrieval | 3.1, 3.2, 3.3 | `!GATE! GOTO:`, BYPASSED sub-steps, Google Drive API, fallback chain |
+| 4 | Mode Selection | none | `!STOP!`, `SET`, three-mode branching |
+| 5 | Evaluation | 5.1, 5.2, 5.3 | `!LOOP!`, `!DONE!`, `!GATE!`, conditional branches on `{VMODE}`, web search, `INPUT` block |
+| 6 | Final Summary | 6.1, 6.2 | `OUTPUT-FORMAT`, `!LOOP!` adjustment gate, score recalculation |
+| 7 | Save Results | 7.1, 7.2 | `!CONFIRM!`, ClickUp write, `!GATE! GOTO: STEP 2` for loop-back, variable reset |
+
+This example demonstrates most SLOP features in a real workflow: sequential steps, sub-steps, conditional branching, loops, gates, variable state management, API integrations, and session looping.
+
+---
+
 ## Model Compatibility
 
 | Model | Compatibility | Notes |
@@ -537,6 +597,12 @@ MAX_LENGTH    =
 
 ---
 
+## VS Code Extension
+
+The `vscode-slop/` directory contains a VS Code extension with syntax highlighting and two color themes (SLOP Dark, SLOP Light) for `.slp` files. See [`vscode-slop/README.md`](vscode-slop/README.md) for install instructions.
+
+---
+
 ## Changelog
 
 | Version | Date | Changes |
@@ -545,7 +611,7 @@ MAX_LENGTH    =
 | v1.1 | 2026-03-23 | Renamed to SLOP. Control keywords wrapped in `!KEYWORD!`. Mode declarations changed to `\|MODE\|`. |
 | v1.2 | 2026-03-23 | Added STEP system with four states. Added `!GATE! GOTO:`, RESUME, and STATUS commands. |
 | v1.3 | 2026-03-24 | Added sub-step system with decimal notation (`STEP N.M`). Parent COMPLETE requires all sub-steps COMPLETE. `!GATE! GOTO:` targets sub-steps. VS Code extension with Dark and Light themes. |
-| v1.4 | 2026-03-24 | Variable names in commands now wrapped in brackets: `SET [VAR] = value`, `RECALL [VAR]`, `DEFAULT: [VAR] = value`. Square brackets `[ ]` are literal syntax for variable names in commands. Curly braces `{VAR}` remain for inline substitution. Schema definition placeholders use angle brackets `<n>`. Three distinct bracket types: `[[ ]]` for blocks, `[ ]` for variable names, `{ }` for substitution. |
+| v1.4 | 2026-03-24 | Variable names in commands now wrapped in brackets: `SET [VAR] = value`, `RECALL [VAR]`, `DEFAULT: [VAR] = value`. Three distinct bracket types: `[[ ]]` blocks, `[ ]` variable names, `{ }` substitution. Schema definition placeholders use angle brackets `<n>`. Completed Venture Reviewer example (7 steps, 26KB). |
 
 ---
 
