@@ -1,0 +1,181 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "SLOP",
+  "scopeName": "source.slop",
+  "fileTypes": ["slp"],
+  "patterns": [
+    { "include": "#comments" },
+    { "include": "#separator" },
+    { "include": "#schema-header-block" },
+    { "include": "#step-declaration" },
+    { "include": "#block-delimiters" },
+    { "include": "#control-keywords" },
+    { "include": "#mode-declarations" },
+    { "include": "#variable-commands" },
+    { "include": "#variable-references" },
+    { "include": "#emphasis-bold" },
+    { "include": "#emphasis-italic" },
+    { "include": "#emphasis-code" },
+    { "include": "#headings" },
+    { "include": "#code-block" },
+    { "include": "#table-pipe" }
+  ],
+  "repository": {
+    "comments": {
+      "match": "^\\s*//.*$",
+      "name": "comment.line.double-slash.slop"
+    },
+    "separator": {
+      "match": "^-{3,}\\s*$",
+      "name": "comment.block.separator.slop"
+    },
+    "schema-header-block": {
+      "begin": "^\\[\\[\\s+SLOP\\s+v[\\d.]+\\s+\\]\\]",
+      "end": "^\\[\\[\\s+/SLOP\\s+v[\\d.]+\\s+\\]\\]",
+      "beginCaptures": {
+        "0": { "name": "entity.name.tag.schema.open.slop" }
+      },
+      "endCaptures": {
+        "0": { "name": "entity.name.tag.schema.close.slop" }
+      },
+      "name": "meta.schema-header.slop",
+      "patterns": [
+        { "include": "#comments" },
+        {
+          "match": "^\\s*(PARSING ORDER|HEADING WEIGHT|INLINE EMPHASIS|BLOCK DELIMITERS|CONTROL KEYWORDS|MODE DECLARATIONS|STEP EXECUTION RULES|SUB-STEP RULES|VARIABLE COMMANDS|VARIABLE REFERENCES|COMMENTS)\\b",
+          "name": "keyword.other.section-label.slop"
+        },
+        {
+          "match": "!(STOP|GATE|CONFIRM|ASSUME|LOOP|DONE|IGNORE)!",
+          "name": "keyword.control.slop"
+        },
+        {
+          "match": "\\|(EXECUTE|PLAN|REVIEW|ITERATE|EXPLAIN|DRAFT)\\|",
+          "name": "keyword.other.mode.slop"
+        },
+        {
+          "match": "\\b(SET|RECALL|DEFAULT:)\\b",
+          "name": "keyword.other.variable-command.slop"
+        },
+        {
+          "match": "\\{[A-Z_]+\\}",
+          "name": "variable.other.reference.slop"
+        },
+        {
+          "match": "#\\s+H[1-4]",
+          "name": "entity.name.function.heading-weight.slop"
+        }
+      ]
+    },
+    "step-declaration": {
+      "match": "^#\\s+STEP\\s+\\d+(\\.\\d+)?:\\s+.*$",
+      "name": "entity.name.function.step.slop"
+    },
+    "block-delimiters": {
+      "match": "\\[\\[\\s*/?(VARS|ROLE|TASK|CONSTRAINTS|INPUT|OUTPUT-FORMAT|EXAMPLE|NOTE|SLOP\\s+v[\\d.]+)\\s*\\]\\]",
+      "name": "entity.name.tag.block.slop"
+    },
+    "control-keywords": {
+      "patterns": [
+        {
+          "match": "!GATE!\\s+GOTO:\\s+STEP\\s+\\d+(\\.\\d+)?",
+          "name": "keyword.control.gate-goto.slop"
+        },
+        {
+          "match": "!(STOP|GATE|CONFIRM|ASSUME|LOOP|DONE|IGNORE)!",
+          "name": "keyword.control.slop"
+        },
+        {
+          "match": "\\bRESUME:\\s+STEP\\s+\\d+(\\.\\d+)?\\s+THEN\\s+(GOTO:\\s+STEP\\s+\\d+(\\.\\d+)?|CONTINUE)",
+          "name": "keyword.control.resume.slop"
+        },
+        {
+          "match": "^\\s*STATUS\\s*$",
+          "name": "keyword.control.status.slop"
+        }
+      ]
+    },
+    "mode-declarations": {
+      "match": "\\|(EXECUTE|PLAN|REVIEW|ITERATE|EXPLAIN|DRAFT)\\|",
+      "name": "keyword.other.mode.slop"
+    },
+    "variable-commands": {
+      "patterns": [
+        {
+          "match": "^\\s*(SET)\\s+([A-Z_][A-Z0-9_]*)\\s*=",
+          "captures": {
+            "1": { "name": "keyword.other.variable-command.slop" },
+            "2": { "name": "variable.other.assignment.slop" }
+          }
+        },
+        {
+          "match": "^\\s*(RECALL)\\s+([A-Z_][A-Z0-9_]*)",
+          "captures": {
+            "1": { "name": "keyword.other.variable-command.slop" },
+            "2": { "name": "variable.other.reference.slop" }
+          }
+        },
+        {
+          "match": "^\\s*(DEFAULT:)\\s+([A-Z_][A-Z0-9_]*)\\s*=",
+          "captures": {
+            "1": { "name": "keyword.other.variable-command.slop" },
+            "2": { "name": "variable.other.assignment.slop" }
+          }
+        }
+      ]
+    },
+    "variable-references": {
+      "match": "\\{[A-Z_][A-Z0-9_]*\\}",
+      "name": "variable.other.reference.slop"
+    },
+    "emphasis-bold": {
+      "match": "\\*\\*[^*]+\\*\\*",
+      "name": "markup.bold.slop"
+    },
+    "emphasis-italic": {
+      "match": "(?<!\\*)\\*(?!\\*)[^*]+\\*(?!\\*)",
+      "name": "markup.italic.slop"
+    },
+    "emphasis-code": {
+      "match": "`[^`]+`",
+      "name": "string.other.code.slop"
+    },
+    "headings": {
+      "patterns": [
+        {
+          "match": "^#{4}\\s+.*$",
+          "name": "markup.heading.4.slop"
+        },
+        {
+          "match": "^#{3}\\s+.*$",
+          "name": "markup.heading.3.slop"
+        },
+        {
+          "match": "^#{2}\\s+.*$",
+          "name": "markup.heading.2.slop"
+        },
+        {
+          "match": "^#\\s+(?!STEP).*$",
+          "name": "markup.heading.1.slop"
+        }
+      ]
+    },
+    "code-block": {
+      "begin": "^```",
+      "end": "^```",
+      "name": "markup.fenced_code.block.slop",
+      "patterns": [
+        { "include": "#block-delimiters" },
+        { "include": "#control-keywords" },
+        { "include": "#mode-declarations" },
+        { "include": "#variable-commands" },
+        { "include": "#variable-references" },
+        { "include": "#step-declaration" }
+      ]
+    },
+    "table-pipe": {
+      "match": "\\|",
+      "name": "punctuation.separator.table.slop"
+    }
+  }
+}

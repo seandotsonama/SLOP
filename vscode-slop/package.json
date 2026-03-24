@@ -1,0 +1,55 @@
+{
+  "name": "slop-language",
+  "displayName": "SLOP - Simple Language of Prompting",
+  "description": "Syntax highlighting and color theme for SLOP (.slp) prompt files",
+  "version": "1.3.0",
+  "publisher": "seandotsonama",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/seandotsonama/SLOP"
+  },
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Themes"
+  ],
+  "keywords": [
+    "slop",
+    "prompting",
+    "llm",
+    "ai",
+    "prompt engineering"
+  ],
+  "contributes": {
+    "languages": [
+      {
+        "id": "slop",
+        "aliases": ["SLOP", "slop"],
+        "extensions": [".slp"],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "slop",
+        "scopeName": "source.slop",
+        "path": "./syntaxes/slop.tmLanguage.json"
+      }
+    ],
+    "themes": [
+      {
+        "label": "SLOP Dark",
+        "uiTheme": "vs-dark",
+        "path": "./themes/slop-dark.json"
+      },
+      {
+        "label": "SLOP Light",
+        "uiTheme": "vs",
+        "path": "./themes/slop-light.json"
+      }
+    ]
+  }
+}

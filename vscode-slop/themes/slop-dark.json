@@ -1,0 +1,166 @@
+{
+  "name": "SLOP Dark",
+  "type": "dark",
+  "colors": {
+    "editor.background": "#1a1a2e",
+    "editor.foreground": "#d4d4d4",
+    "editorLineNumber.foreground": "#555577",
+    "editor.lineHighlightBackground": "#22223a",
+    "editor.selectionBackground": "#2a2a4a"
+  },
+  "tokenColors": [
+    {
+      "name": "SLOP Block Delimiters",
+      "scope": [
+        "entity.name.tag.block.slop",
+        "entity.name.tag.schema.open.slop",
+        "entity.name.tag.schema.close.slop"
+      ],
+      "settings": {
+        "foreground": "#1589F0",
+        "fontStyle": "bold"
+      }
+    },
+    {
+      "name": "SLOP Control Keywords",
+      "scope": [
+        "keyword.control.slop",
+        "keyword.control.gate-goto.slop",
+        "keyword.control.resume.slop",
+        "keyword.control.status.slop"
+      ],
+      "settings": {
+        "foreground": "#f03c15",
+        "fontStyle": "bold"
+      }
+    },
+    {
+      "name": "SLOP Mode Declarations",
+      "scope": "keyword.other.mode.slop",
+      "settings": {
+        "foreground": "#9B59B6",
+        "fontStyle": "bold"
+      }
+    },
+    {
+      "name": "SLOP Variable Commands (SET, RECALL, DEFAULT)",
+      "scope": "keyword.other.variable-command.slop",
+      "settings": {
+        "foreground": "#2ECC71",
+        "fontStyle": "bold"
+      }
+    },
+    {
+      "name": "SLOP Variable References {VAR}",
+      "scope": [
+        "variable.other.reference.slop",
+        "variable.other.assignment.slop"
+      ],
+      "settings": {
+        "foreground": "#E67E22"
+      }
+    },
+    {
+      "name": "SLOP Step Declarations",
+      "scope": "entity.name.function.step.slop",
+      "settings": {
+        "foreground": "#F1C40F",
+        "fontStyle": "bold"
+      }
+    },
+    {
+      "name": "SLOP Bold Emphasis (hard requirements)",
+      "scope": "markup.bold.slop",
+      "settings": {
+        "foreground": "#FFFFFF",
+        "fontStyle": "bold"
+      }
+    },
+    {
+      "name": "SLOP Italic Emphasis (soft guidance)",
+      "scope": "markup.italic.slop",
+      "settings": {
+        "foreground": "#95A5A6",
+        "fontStyle": "italic"
+      }
+    },
+    {
+      "name": "SLOP Code/Literal Strings",
+      "scope": "string.other.code.slop",
+      "settings": {
+        "foreground": "#BDC3C7"
+      }
+    },
+    {
+      "name": "SLOP Comments",
+      "scope": [
+        "comment.line.double-slash.slop",
+        "comment.block.separator.slop"
+      ],
+      "settings": {
+        "foreground": "#555577",
+        "fontStyle": "italic"
+      }
+    },
+    {
+      "name": "SLOP Schema Section Labels",
+      "scope": "keyword.other.section-label.slop",
+      "settings": {
+        "foreground": "#1589F0"
+      }
+    },
+    {
+      "name": "SLOP Heading H1 (non-step)",
+      "scope": "markup.heading.1.slop",
+      "settings": {
+        "foreground": "#F1C40F",
+        "fontStyle": "bold"
+      }
+    },
+    {
+      "name": "SLOP Heading H2",
+      "scope": "markup.heading.2.slop",
+      "settings": {
+        "foreground": "#d4d4d4",
+        "fontStyle": "bold"
+      }
+    },
+    {
+      "name": "SLOP Heading H3",
+      "scope": "markup.heading.3.slop",
+      "settings": {
+        "foreground": "#AAAACC",
+        "fontStyle": "bold"
+      }
+    },
+    {
+      "name": "SLOP Heading H4",
+      "scope": "markup.heading.4.slop",
+      "settings": {
+        "foreground": "#777799",
+        "fontStyle": "italic"
+      }
+    },
+    {
+      "name": "SLOP Code Blocks",
+      "scope": "markup.fenced_code.block.slop",
+      "settings": {
+        "foreground": "#AAAAAA"
+      }
+    },
+    {
+      "name": "SLOP Heading Weight Labels",
+      "scope": "entity.name.function.heading-weight.slop",
+      "settings": {
+        "foreground": "#F1C40F"
+      }
+    },
+    {
+      "name": "SLOP Table Pipes",
+      "scope": "punctuation.separator.table.slop",
+      "settings": {
+        "foreground": "#555577"
+      }
+    }
+  ]
+}
