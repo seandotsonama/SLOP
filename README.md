@@ -21,185 +21,31 @@ simple, model-agnostic, and usable in any plain-text prompt environment.
 
 ## The Case for a Standardized Prompting Language in AI
 
-AI is powerful, but inconsistent.
+AI is non-deterministic. Small changes in wording can produce different outputs. That variability is acceptable in exploration, but it becomes a liability in production where consistency matters.
 
-Same model. Same data. Slightly different prompt. Different answer.
+A standardized prompting language reduces that variability by enforcing structure. Instead of free-form prompts, inputs follow a defined format with clear roles, constraints, and expected outputs. The objective is not better prompts, it is repeatable results.
 
-That variability is not a bug. It is how probabilistic systems work. But it creates a problem the moment you try to use AI for repeatable work.
+This is the same principle that made manufacturing scale. Controlled inputs lead to predictable outputs. AI behaves the same way.
 
-A standardized prompting language is an attempt to solve that.
+At a minimum, a standardized prompt defines:
+	•	role, what the AI is acting as
+	•	task, what must be done
+	•	input, the data provided
+	•	rules, constraints and exclusions
+	•	output format, exact structure required
 
-Call it SLOP, Simple Language of Prompting, or anything else. The concept is the same: constrain inputs to stabilize outputs.
+This shifts prompting from conversation to interface.
 
-### What is a Standardized Prompting Language
+The advantages are practical. Outputs become more consistent across users and sessions. Reliability improves because results are less dependent on individual phrasing. Teams move faster since they are not rewriting prompts each time. When something breaks, it is easier to isolate whether the issue is in the task, input, or rules. Most importantly, it allows AI to scale across a team instead of relying on a few individuals who know how to “talk to it.”
 
-A structured, rule-based way to talk to AI.
+There are tradeoffs. Structure limits flexibility, which makes it less useful for creative or exploratory work. There is an upfront cost to defining standards and training teams. Standards require maintenance and versioning. It also does not eliminate randomness, it only reduces it. There is a risk of over-structuring, where teams optimize for format instead of outcome.
 
-Instead of free-form prompts, you define:
+In practice, this approach works best where outputs need to be repeatable and usable downstream, engineering documentation, sales workflows, operational reporting, and analysis. It is less effective where ambiguity is part of the process.
 
-- Fixed sections
-- Known keywords
-- Expected response formats
-- Constraints on interpretation
+The shift is straightforward. AI stops being something you interact with casually and becomes something you operate systematically. That is what makes it usable in real systems.
 
-Example structure:
-
-- ROLE: what the AI is acting as
-- TASK: what it must do
-- INPUT: the data
-- RULES: constraints and exclusions
-- OUTPUT FORMAT: exact structure required
-
-This turns prompting into something closer to an API contract.
-
-### Why This Works
-
-AI models are sensitive to phrasing. Small changes shift probability distributions.
-
-Two key dynamics:
-
-- Variability increases with ambiguity
-- Consistency increases with constraint
-
-Standardization reduces ambiguity.
-
-You are not asking better questions. You are removing degrees of freedom.
-
-### Pros
-
-#### 1. Output consistency
-
-- Same structure in, similar structure out
-- Reduces variance across users and sessions
-- Critical for workflows, automation, and QA
-
-#### 2. Lower cognitive load
-
-- Users do not reinvent prompts each time
-- Faster onboarding for teams
-- Easier to delegate
-
-#### 3. Debuggability
-
-- When outputs are wrong, you can isolate the failure
-- Was it ROLE, TASK, INPUT, or RULES
-- Enables iterative improvement
-
-#### 4. Composability
-
-- Prompts become modular
-- You can chain them reliably
-- Works well with agents and pipelines
-
-#### 5. Model-agnostic behavior
-
-- Standard structure reduces sensitivity to model differences
-- Easier to swap models without rewriting everything
-
-### Cons
-
-#### 1. Reduced flexibility
-
-- You constrain creative exploration
-- Not ideal for ideation or open-ended work
-
-#### 2. Overfitting to structure
-
-- Teams may optimize for the format, not the outcome
-- Can lead to rigid thinking
-
-#### 3. Initial setup cost
-
-- Requires defining standards, training users
-- Needs governance to avoid drift
-
-#### 4. False sense of determinism
-
-- Even with structure, AI is still probabilistic
-- You reduce variance, you do not eliminate it
-
-#### 5. Maintenance overhead
-
-- Standards evolve
-- Prompts need versioning and updates
-
-### Where Standardization Wins
-
-Use it when:
-
-- Outputs must be repeatable
-- Results feed downstream systems
-- Multiple people interact with the same AI workflows
-- Compliance or auditability matters
-
-Examples:
-
-- Sales qualification summaries
-- Engineering documentation
-- Due diligence reports
-- SOP generation
-- Code transformation
-
-### Where It Fails
-
-Avoid strict standardization when:
-
-- Exploring ideas
-- Early-stage product thinking
-- Creative writing
-- Ambiguous problem framing
-
-In those cases, variability is useful.
-
-### Key Design Principles
-
-If you build a prompting language, enforce these:
-
-#### 1. Explicit sections
-
-Do not rely on paragraphs. Use labeled blocks.
-
-#### 2. Deterministic output formats
-
-Force:
-
-- Bullet lists
-- Tables
-- JSON where possible
-
-#### 3. Hard constraints
-
-State what the AI must not do.
-
-Example:
-
-- No assumptions beyond input
-- No external knowledge
-- No formatting deviations
-
-#### 4. Token discipline
-
-Short, structured prompts outperform long narrative ones.
-
-#### 5. Versioning
-
-Treat prompts like code.
-
-- v1.0, v1.1, v2.0
-- Track changes
-- Measure output differences
-
-### The Real Insight
-
-You are not improving the AI.
-
-You are reducing entropy in how humans interact with it.
-
-The biggest source of inconsistency is not the model. It is the user.
-
-Standardized prompting shifts AI from a tool you "talk to" into a system you "operate."
-
-That is the difference between experimentation and production.
+For a deeper example, including SLOP (Simple Language of Prompting):
+https://automationnavigator.substack.com/p/ai-slop-simple-language-of-prompting
 
 ---
 
