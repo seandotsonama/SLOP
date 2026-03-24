@@ -2,23 +2,55 @@
   "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
   "name": "SLOP",
   "scopeName": "source.slop",
-  "fileTypes": ["slp"],
+  "fileTypes": [
+    "slp"
+  ],
   "patterns": [
-    { "include": "#comments" },
-    { "include": "#separator" },
-    { "include": "#schema-header-block" },
-    { "include": "#step-declaration" },
-    { "include": "#block-delimiters" },
-    { "include": "#control-keywords" },
-    { "include": "#mode-declarations" },
-    { "include": "#variable-commands" },
-    { "include": "#variable-references" },
-    { "include": "#emphasis-bold" },
-    { "include": "#emphasis-italic" },
-    { "include": "#emphasis-code" },
-    { "include": "#headings" },
-    { "include": "#code-block" },
-    { "include": "#table-pipe" }
+    {
+      "include": "#comments"
+    },
+    {
+      "include": "#separator"
+    },
+    {
+      "include": "#schema-header-block"
+    },
+    {
+      "include": "#step-declaration"
+    },
+    {
+      "include": "#block-delimiters"
+    },
+    {
+      "include": "#control-keywords"
+    },
+    {
+      "include": "#mode-declarations"
+    },
+    {
+      "include": "#variable-commands"
+    },
+    {
+      "include": "#variable-references"
+    },
+    {
+      "include": "#emphasis-bold"
+    },
+    {
+      "include": "#emphasis-italic"
+    },
+    {
+      "include": "#emphasis-code"
+    },
+    {
+      "include": "#headings"
+    },
+    {
+      "include": "#code-block"
+    },
+    {
+      "include": "#table-pipe"
+    }
   ],
   "repository": {
     "comments": {
@@ -33,14 +65,20 @@
       "begin": "^\\[\\[\\s+SLOP\\s+v[\\d.]+\\s+\\]\\]",
       "end": "^\\[\\[\\s+/SLOP\\s+v[\\d.]+\\s+\\]\\]",
       "beginCaptures": {
-        "0": { "name": "entity.name.tag.schema.open.slop" }
+        "0": {
+          "name": "entity.name.tag.schema.open.slop"
+        }
       },
       "endCaptures": {
-        "0": { "name": "entity.name.tag.schema.close.slop" }
+        "0": {
+          "name": "entity.name.tag.schema.close.slop"
+        }
       },
       "name": "meta.schema-header.slop",
       "patterns": [
-        { "include": "#comments" },
+        {
+          "include": "#comments"
+        },
         {
           "match": "^\\s*(PARSING ORDER|HEADING WEIGHT|INLINE EMPHASIS|BLOCK DELIMITERS|CONTROL KEYWORDS|MODE DECLARATIONS|STEP EXECUTION RULES|SUB-STEP RULES|VARIABLE COMMANDS|VARIABLE REFERENCES|COMMENTS)\\b",
           "name": "keyword.other.section-label.slop"
@@ -102,24 +140,36 @@
     "variable-commands": {
       "patterns": [
         {
-          "match": "^\\s*(SET)\\s+([A-Z_][A-Z0-9_]*)\\s*=",
+          "match": "^\\s*(SET)\\s+\\[([A-Z_][A-Z0-9_]*)\\]\\s*=",
           "captures": {
-            "1": { "name": "keyword.other.variable-command.slop" },
-            "2": { "name": "variable.other.assignment.slop" }
+            "1": {
+              "name": "keyword.other.variable-command.slop"
+            },
+            "2": {
+              "name": "variable.other.assignment.slop"
+            }
           }
         },
         {
-          "match": "^\\s*(RECALL)\\s+([A-Z_][A-Z0-9_]*)",
+          "match": "^\\s*(RECALL)\\s+\\[([A-Z_][A-Z0-9_]*)\\]",
           "captures": {
-            "1": { "name": "keyword.other.variable-command.slop" },
-            "2": { "name": "variable.other.reference.slop" }
+            "1": {
+              "name": "keyword.other.variable-command.slop"
+            },
+            "2": {
+              "name": "variable.other.reference.slop"
+            }
           }
         },
         {
-          "match": "^\\s*(DEFAULT:)\\s+([A-Z_][A-Z0-9_]*)\\s*=",
+          "match": "^\\s*(DEFAULT:)\\s+\\[([A-Z_][A-Z0-9_]*)\\]\\s*=",
           "captures": {
-            "1": { "name": "keyword.other.variable-command.slop" },
-            "2": { "name": "variable.other.assignment.slop" }
+            "1": {
+              "name": "keyword.other.variable-command.slop"
+            },
+            "2": {
+              "name": "variable.other.assignment.slop"
+            }
           }
         }
       ]
@@ -165,12 +215,24 @@
       "end": "^```",
       "name": "markup.fenced_code.block.slop",
       "patterns": [
-        { "include": "#block-delimiters" },
-        { "include": "#control-keywords" },
-        { "include": "#mode-declarations" },
-        { "include": "#variable-commands" },
-        { "include": "#variable-references" },
-        { "include": "#step-declaration" }
+        {
+          "include": "#block-delimiters"
+        },
+        {
+          "include": "#control-keywords"
+        },
+        {
+          "include": "#mode-declarations"
+        },
+        {
+          "include": "#variable-commands"
+        },
+        {
+          "include": "#variable-references"
+        },
+        {
+          "include": "#step-declaration"
+        }
       ]
     },
     "table-pipe": {

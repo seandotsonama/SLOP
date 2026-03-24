@@ -1,57 +1,14 @@
-# SLOP v1.4
-## Simple Language Of Prompting
+# SLOP v1.4 — Full Specification Reference
+
+## Simple Language of Prompting
 
 *A self-bootstrapping session metalanguage for LLM interaction*
-*Sean Dotson, Mar 23, 2026 - sean@automationama.com*
+*Sean Dotson, Mar 24, 2026 - sean@automationama.com*
 https://github.com/seandotsonama/SLOP
 
 ---
 
-## What Is S.L.O.P. (Simple Language Of Prompting)
-
-SLOP is a plain-text prompt schema designed to be pasted at the start of any LLM session.
-It defines its own rules inline, so the model learns the language from the document itself.
-No external tooling, no SDK, no compiler required.
-
-The design borrows XML-adjacent tag conventions that modern LLMs already parse well, and
-adds a control-flow and variable layer that existing prompt frameworks omit. It is intentionally
-simple, model-agnostic, and usable in any plain-text prompt environment.
-
----
-
-## The Case for a Standardized Prompting Language in AI
-
-AI is non-deterministic. Small changes in wording can produce different outputs. That variability is acceptable in exploration, but it becomes a liability in production where consistency matters.
-
-A standardized prompting language reduces that variability by enforcing structure. Instead of free-form prompts, inputs follow a defined format with clear roles, constraints, and expected outputs. The objective is not better prompts, it is repeatable results.
-
-This is the same principle that made manufacturing scale. Controlled inputs lead to predictable outputs. AI behaves the same way.
-
-At a minimum, a standardized prompt defines:
-- role, what the AI is acting as
-- task, what must be done
-- input, the data provided
-- rules, constraints and exclusions
-- output format, exact structure required
-
-This shifts prompting from conversation to interface.
-
-The advantages are practical. Outputs become more consistent across users and sessions. Reliability improves because results are less dependent on individual phrasing. Teams move faster since they are not rewriting prompts each time. When something breaks, it is easier to isolate whether the issue is in the task, input, or rules. Most importantly, it allows AI to scale across a team instead of relying on a few individuals who know how to "talk to it."
-
-There are tradeoffs. Structure limits flexibility, which makes it less useful for creative or exploratory work. There is an upfront cost to defining standards and training teams. Standards require maintenance and versioning. It also does not eliminate randomness, it only reduces it. There is a risk of over-structuring, where teams optimize for format instead of outcome.
-
-In practice, this approach works best where outputs need to be repeatable and usable downstream, engineering documentation, sales workflows, operational reporting, and analysis. It is less effective where ambiguity is part of the process.
-
-The shift is straightforward. AI stops being something you interact with casually and becomes something you operate systematically. That is what makes it usable in real systems.
-
-For a deeper example, including SLOP (Simple Language of Prompting):
-https://automationnavigator.substack.com/p/ai-slop-simple-language-of-prompting
-
----
-
 ## Color Legend
-
-Each SLOP syntax category is color-coded throughout this document for quick visual scanning.
 
 | Category | Syntax | Dark | Light |
 |---|---|---|---|
@@ -63,22 +20,6 @@ Each SLOP syntax category is color-coded throughout this document for quick visu
 | Inline emphasis | `**bold**` / `*italic*` / `` `backtick` `` | ![#95A5A6](https://placehold.co/15x15/95A5A6/95A5A6.png) `#95A5A6` | ![#7F8C8D](https://placehold.co/15x15/7F8C8D/7F8C8D.png) `#7F8C8D` |
 | Step declarations | `# STEP N:` | ![#F1C40F](https://placehold.co/15x15/F1C40F/F1C40F.png) `#F1C40F` | ![#B7950B](https://placehold.co/15x15/B7950B/B7950B.png) `#B7950B` |
 | Comments | `//` | ![#555577](https://placehold.co/15x15/555577/555577.png) `#555577` | ![#95A5A6](https://placehold.co/15x15/95A5A6/95A5A6.png) `#95A5A6` |
-
----
-
-## Syntax Overview
-
-SLOP uses seven visually distinct syntax conventions. Each maps to a different type of instruction.
-
-| Convention | Syntax | Purpose | Dark | Light |
-|---|---|---|---|---|
-| Block delimiters | `[[ BLOCK ]] / [[ /BLOCK ]]` | Wrap distinct sections of a prompt | ![#1589F0](https://placehold.co/15x15/1589F0/1589F0.png) `#1589F0` | ![#1270C0](https://placehold.co/15x15/1270C0/1270C0.png) `#1270C0` |
-| Control keywords | `!KEYWORD!` | Alter execution flow or set conditions | ![#f03c15](https://placehold.co/15x15/f03c15/f03c15.png) `#f03c15` | ![#C0392B](https://placehold.co/15x15/C0392B/C0392B.png) `#C0392B` |
-| Mode declarations | `\|MODE\|` | Set the model's operational posture | ![#9B59B6](https://placehold.co/15x15/9B59B6/9B59B6.png) `#9B59B6` | ![#8E44AD](https://placehold.co/15x15/8E44AD/8E44AD.png) `#8E44AD` |
-| Variable commands | `SET / RECALL / DEFAULT:` | Manage session state | ![#2ECC71](https://placehold.co/15x15/2ECC71/2ECC71.png) `#2ECC71` | ![#27AE60](https://placehold.co/15x15/27AE60/27AE60.png) `#27AE60` |
-| Variable references | `{VAR_NAME}` | Substitute named values inline | ![#E67E22](https://placehold.co/15x15/E67E22/E67E22.png) `#E67E22` | ![#D35400](https://placehold.co/15x15/D35400/D35400.png) `#D35400` |
-| Inline emphasis | `**bold**` / `*italic*` / `` `backtick` `` | Signal priority within any block | ![#95A5A6](https://placehold.co/15x15/95A5A6/95A5A6.png) `#95A5A6` | ![#7F8C8D](https://placehold.co/15x15/7F8C8D/7F8C8D.png) `#7F8C8D` |
-| Step declarations | `# STEP N: [title]` | Define ordered execution units | ![#F1C40F](https://placehold.co/15x15/F1C40F/F1C40F.png) `#F1C40F` | ![#B7950B](https://placehold.co/15x15/B7950B/B7950B.png) `#B7950B` |
 
 ---
 
@@ -215,36 +156,22 @@ exclamation marks. They can appear inside any block or as standalone lines.
 
 ## Step System
 
-### Purpose
-
 Steps impose a strict sequential execution order on a session. They are the highest-level
-organizational unit in SLOP, sitting above blocks and tasks. Use them when a workflow has
-discrete phases that must be completed in order, with conditions that must be satisfied before
-advancing.
+organizational unit in SLOP, sitting above blocks and tasks.
 
 ### Declaration
 
 Steps are declared as top-level H1 headings. The step number must be sequential starting at 1.
-A short descriptive title should follow the step number.
 
 ```
 # STEP 1: Gather Requirements
 # STEP 2: Validate Inputs
 # STEP 3: Generate Draft
-# STEP 4: Review and Approve
-# STEP 5: Deliver Output
 ```
 
 ### Sub-Steps
 
 Sub-steps break a parent step into ordered internal phases using decimal notation.
-Use them when a step contains multiple sequential operations that benefit from independent
-state tracking, gating, or status reporting.
-
-#### Sub-Step Declaration
-
-Sub-steps are declared as H1 headings with decimal numbering. The parent step number
-comes first, followed by a dot and the sub-step number starting at 1.
 
 ```
 # STEP 2: Venture Retrieval
@@ -253,28 +180,16 @@ comes first, followed by a dot and the sub-step number starting at 1.
 # STEP 2.3: Present Selection
 ```
 
-#### Sub-Step Rules
+### Step and Sub-Step Rules
 
+- Steps must be executed in order: STEP 1, STEP 2, STEP 3, and so on.
+- You may not advance to the next step until the current step is marked COMPLETE.
+- You may not skip a step except via an explicit `!GATE! GOTO: STEP N` instruction.
 - Sub-steps execute sequentially within their parent step.
 - A parent step is COMPLETE only when all of its sub-steps are COMPLETE.
-- Sub-steps carry the same four states as top-level steps: PENDING, ACTIVE, COMPLETE, BYPASSED.
-- All control keywords (`!STOP!`, `!GATE!`, `!GATE! GOTO:`) work identically inside sub-steps.
 - `!GATE! GOTO:` may target any step or sub-step (e.g. `STEP 3.2` or `STEP 5`).
 - If a jump skips remaining sub-steps, those sub-steps are marked BYPASSED.
 - Sub-steps are optional. Steps without internal phases do not require them.
-
-#### STATUS with Sub-Steps
-
-When sub-steps are present, the STATUS report shows them indented under their parent.
-
-```
-STEP 1: Reviewer Identification     [COMPLETE]
-STEP 2: Venture Retrieval           [ACTIVE]
-  STEP 2.1: Fetch Task List         [COMPLETE]
-  STEP 2.2: Filter Scored Ventures  [ACTIVE]
-  STEP 2.3: Present Selection       [PENDING]
-STEP 3: Proposal Retrieval          [PENDING]
-```
 
 ### Step States
 
@@ -285,68 +200,15 @@ STEP 3: Proposal Retrieval          [PENDING]
 | COMPLETE | All conditions satisfied. Ready to advance to the next step. | ![#F1C40F](https://placehold.co/15x15/F1C40F/F1C40F.png) `#F1C40F` | ![#B7950B](https://placehold.co/15x15/B7950B/B7950B.png) `#B7950B` |
 | BYPASSED | Skipped via `!GATE! GOTO:`. Resumable by explicit instruction. | ![#F1C40F](https://placehold.co/15x15/F1C40F/F1C40F.png) `#F1C40F` | ![#B7950B](https://placehold.co/15x15/B7950B/B7950B.png) `#B7950B` |
 
-The model should track and report the current state of each step when asked, or when a
-state change occurs.
-
-### Advancement Rules
-
-- Steps must be executed in order: STEP 1, STEP 2, STEP 3, and so on.
-- You may not advance to the next step until the current step is marked COMPLETE.
-- A step is COMPLETE when all conditions, tasks, `!GATE!` checks, and `!CONFIRM!` approvals within it have been satisfied.
-- You may not skip a step except via an explicit `!GATE! GOTO: STEP N` instruction.
-- If a step contains a `!STOP!` condition that evaluates to false, the step cannot be marked COMPLETE until the condition is resolved.
-
-### Non-Sequential Jumps via `!GATE! GOTO:`
-
-A `!GATE! GOTO:` instruction inside a step can redirect execution to any other step when
-a condition is met. This is the only mechanism for non-sequential step execution.
-
-All steps between the current step and the destination step are marked BYPASSED.
-BYPASSED steps are not deleted. They retain their content and can be resumed later.
+### STATUS Report Example
 
 ```
-# STEP 2: Validate Client Type
-
-[[ TASK ]]
-Determine whether the client is an existing account or a new prospect.
-!GATE! GOTO: STEP 5 if client is flagged as existing in the INPUT block.
-[[ /TASK ]]
-```
-
-In this example, if the condition is met, STEP 3 and STEP 4 are marked BYPASSED and
-execution moves directly to STEP 5.
-
-### Resuming a Bypassed Step
-
-A BYPASSED step can be resumed at any point using the RESUME command. The user must
-specify where execution should go after the resumed step completes.
-
-```
-RESUME: STEP 3 THEN GOTO: STEP 6
-RESUME: STEP 4 THEN CONTINUE
-```
-
-THEN CONTINUE resumes sequential execution from the resumed step onward.
-THEN GOTO: STEP N jumps to the specified step after the resumed step completes.
-
-### Step Status Report
-
-At any point the user can request a status report using:
-
-```
-STATUS
-```
-
-The model will respond with the current state of all steps in the session.
-
-Example response format:
-
-```
-STEP 1: Gather Requirements     [COMPLETE]
-STEP 2: Validate Client Type    [COMPLETE]
-STEP 3: Prepare Proposal        [BYPASSED]
-STEP 4: Internal Review         [BYPASSED]
-STEP 5: Client Presentation     [ACTIVE]
+STEP 1: Reviewer Identification     [COMPLETE]
+STEP 2: Venture Retrieval           [ACTIVE]
+  STEP 2.1: Fetch Task List         [COMPLETE]
+  STEP 2.2: Filter Scored Ventures  [ACTIVE]
+  STEP 2.3: Present Selection       [PENDING]
+STEP 3: Proposal Retrieval          [PENDING]
 ```
 
 ---
@@ -374,7 +236,7 @@ Variables give the model persistent named values to reference across a session w
 requiring the user to repeat information. They also allow prompts to be reused as templates
 by swapping variable values.
 
-### Commands
+### Variable Commands
 
 | Command | Purpose | Dark | Light |
 |---|---|---|---|
@@ -396,7 +258,7 @@ by swapping variable values.
 | Dynamic | Updated mid-session with `SET`. New value applies immediately. |
 | Computed | Derived from other variables. References other `{VAR_NAME}` values. |
 
-### Variable Block
+### Variable Block Example
 
 ```
 [[ VARS ]]
@@ -406,27 +268,7 @@ OUTPUT_FORMAT = "markdown with headers"
 AUDIENCE      = "PE firm operating partners"
 CONTEXT       = "industrial packaging line automation"
 MAX_LENGTH    = 600
-
 [[ /VARS ]]
-```
-
-### Inline Reference
-
-Use `{VAR_NAME}` anywhere in a prompt or block to substitute the current value.
-
-```
-Draft a summary for {CLIENT} describing the ROI case for robotic palletizing.
-Tone: {TONE}. Audience: {AUDIENCE}. Length: {MAX_LENGTH}.
-```
-
-### Dynamic Update
-
-Call `SET` at any point mid-session to change a variable. All subsequent references
-to that variable will use the new value.
-
-```
-SET [TONE] = informal
-SET [AUDIENCE] = plant floor operators
 ```
 
 ---
@@ -517,23 +359,17 @@ MAX_LENGTH    =
 
 ---
 
-## Model Compatibility
+## VS Code Theme Colors
 
-| Model | Compatibility | Notes |
+Editor chrome colors used in the SLOP Dark and SLOP Light themes.
+
+| Element | Dark | Light |
 |---|---|---|
-| Claude Sonnet / Opus | Excellent | XML-adjacent syntax parses cleanly. Block hierarchy, control keywords, and step tracking reliable. |
-| GPT-4o | Good | Respects block structure. Control keywords and variable substitution reliable. Step state tracking generally solid. |
-| GPT-4-turbo | Good | Similar to GPT-4o. Occasional drift on `!LOOP!` and step state across long sessions. |
-| Gemini 1.5 Pro | Moderate | Follows structure generally. Step state tracking less consistent without explicit STATUS calls. |
-| Llama 3 / Mistral | Variable | Smaller models may lose step state across long sessions. Recommend explicit STATUS calls at each step boundary. |
-| Local / fine-tuned | Unknown | Validate manually. Step state tracking is the most likely failure point on smaller models. |
-
-### Known Limitations
-
-- Variables do not persist across separate sessions. Each session requires a fresh `[[ VARS ]]` block.
-- Step state is held in the model's context window. Very long sessions may cause state drift on smaller models. Use STATUS calls to force re-evaluation if behavior seems inconsistent.
-- `!LOOP!` behavior depends on the model's ability to track iteration state. Use explicit `!GATE!` conditions for better reliability on smaller models.
-- In multi-agent systems, include the schema header in each agent's system prompt individually rather than assuming it propagates across agents.
+| Editor background | ![#1a1a2e](https://placehold.co/15x15/1a1a2e/1a1a2e.png) `#1a1a2e` | ![#FAFAFA](https://placehold.co/15x15/FAFAFA/FAFAFA.png) `#FAFAFA` |
+| Editor foreground | ![#d4d4d4](https://placehold.co/15x15/d4d4d4/d4d4d4.png) `#d4d4d4` | ![#2C3E50](https://placehold.co/15x15/2C3E50/2C3E50.png) `#2C3E50` |
+| Line numbers | ![#555577](https://placehold.co/15x15/555577/555577.png) `#555577` | ![#95A5A6](https://placehold.co/15x15/95A5A6/95A5A6.png) `#95A5A6` |
+| Line highlight | ![#22223a](https://placehold.co/15x15/22223a/22223a.png) `#22223a` | ![#F0F0F5](https://placehold.co/15x15/F0F0F5/F0F0F5.png) `#F0F0F5` |
+| Selection | ![#2a2a4a](https://placehold.co/15x15/2a2a4a/2a2a4a.png) `#2a2a4a` | ![#D5E8F5](https://placehold.co/15x15/D5E8F5/D5E8F5.png) `#D5E8F5` |
 
 ---
 
@@ -545,7 +381,7 @@ MAX_LENGTH    =
 | v1.1 | 2026-03-23 | Renamed to SLOP. Control keywords wrapped in `!KEYWORD!`. Mode declarations changed to `\|MODE\|`. |
 | v1.2 | 2026-03-23 | Added STEP system with four states. Added `!GATE! GOTO:`, RESUME, and STATUS commands. |
 | v1.3 | 2026-03-24 | Added sub-step system with decimal notation (`STEP N.M`). Parent COMPLETE requires all sub-steps COMPLETE. `!GATE! GOTO:` targets sub-steps. VS Code extension with Dark and Light themes. |
-| v1.4 | 2026-03-24 | Variable names in commands now wrapped in brackets: `SET [VAR] = value`, `RECALL [VAR]`, `DEFAULT: [VAR] = value`. Square brackets `[ ]` are literal syntax for variable names in commands. Curly braces `{VAR}` remain for inline substitution. Schema definition placeholders use angle brackets `<n>`. Three distinct bracket types: `[[ ]]` for blocks, `[ ]` for variable names, `{ }` for substitution. |
+| v1.4 | 2026-03-24 | Variable names in commands now wrapped in brackets: `SET [VAR]`, `RECALL [VAR]`, `DEFAULT: [VAR]`. Three distinct bracket types: `[[ ]]` blocks, `[ ]` variable names, `{ }` substitution. |
 
 ---
 

@@ -1,6 +1,6 @@
-[[ SLOP v1.3 ]]
+[[ SLOP v1.4 ]]
 
-You are now operating under SLOP v1.3 (Simple Language of Prompting).
+You are now operating under SLOP v1.4 (Simple Language of Prompting).
 Read and internalize this entire block before responding to anything.
 Apply these rules for the remainder of the session unless explicitly instructed otherwise.
 
@@ -69,9 +69,9 @@ SUB-STEP RULES
   Sub-steps are optional. Steps without internal phases do not require them.
 
 VARIABLE COMMANDS
-  SET [VAR] = [value]    Store a named value for use throughout this session.
-  RECALL [VAR]           Read and apply the current value of a named variable.
-  DEFAULT: [VAR] = [] Use this value if the variable is not explicitly set.
+  SET [<n>] = <value>    Store a named value for use throughout this session.
+  RECALL [<n>]           Read and apply the current value of a named variable.
+  DEFAULT: [<n>] = <value> Use this value if the variable is not explicitly set.
 
 VARIABLE REFERENCES
   Use {VAR_NAME} anywhere in a prompt or block to substitute the current value.
@@ -79,7 +79,7 @@ VARIABLE REFERENCES
 COMMENTS
 // These commands to be ignored. Only for human read comments.
 
-[[ /SLOP v1.3 ]]
+[[ /SLOP v1.4 ]]
 
 -------
 
@@ -148,9 +148,9 @@ Options: Dan, Paul, Travis, Sean, Will.
 !STOP! until a valid reviewer is selected from the five options above.
 
 Once selected, SET the following variables from the identity map above:
-SET REVIEWER_NAME     = [selected name]
-SET REVIEWER_EMAIL    = [mapped email]
-SET REVIEWER_FIELD_ID = [mapped ClickUp field ID]
+SET [REVIEWER_NAME]     = <selected name>
+SET [REVIEWER_EMAIL]    = <mapped email>
+SET [REVIEWER_FIELD_ID] = <mapped ClickUp field ID>
 
 // All three variables must be set before this step is COMPLETE.
 // If the selection is invalid or unrecognized, re-present the widget. Do not proceed.
@@ -186,7 +186,7 @@ Discard all other tasks.
 
 [[ TASK ]]
 For each task remaining after STEP 2.1, fetch full task details using `clickup_get_task` with `detail_level=detailed`.
-Check the value of the reviewer's score custom field using RECALL REVIEWER_FIELD_ID.
+Check the value of the reviewer's score custom field using RECALL [REVIEWER_FIELD_ID].
 
 - If the field value is blank, null, or 0: include the task in the unscored list.
 - If the field value is a number (1-50): the reviewer has already scored this venture. Exclude it silently.
@@ -216,8 +216,8 @@ Present the unscored ventures to the reviewer using `ask_user_input_v0` as a `si
 !STOP! until the reviewer selects a venture from the widget.
 
 Once selected:
-SET VPROJECT_NUMBER  = [full task name, e.g. "2026 Q1 0028 - RestaurantSafe"]
-SET VPROJECT_TASK_ID = [task ID of the selected venture]
+SET [VPROJECT_NUMBER]  = <full task name, e.g. "2026 Q1 0028 - RestaurantSafe">
+SET [VPROJECT_TASK_ID] = <task ID of the selected venture>
 
 // Both variables must be set before this sub-step is COMPLETE.
 [[ /TASK ]]
@@ -235,7 +235,7 @@ SET VPROJECT_TASK_ID = [task ID of the selected venture]
 # STEP 3.1: Fetch Proposal via PFL URL (Primary)
 
 [[ TASK ]]
-Check the value of custom field `183b8877-51a5-4534-a96b-964e7d648684` ("PFL URL from Google Drive") on the task identified by RECALL VPROJECT_TASK_ID.
+Check the value of custom field `183b8877-51a5-4534-a96b-964e7d648684` ("PFL URL from Google Drive") on the task identified by RECALL [VPROJECT_TASK_ID].
 
 ### If a PFL URL is present:
 
@@ -330,10 +330,9 @@ Options:
 !STOP! until the reviewer selects a mode.
 
 Once selected, map and store the value:
-- Normal Mode  → SET VMODE = 1
-- Express Mode → SET VMODE = 2
-- Insane Mode  → SET VMODE = 3
+- Normal Mode  → SET [VMODE] = 1
+- Express Mode → SET [VMODE] = 2
+- Insane Mode  → SET [VMODE] = 3
 
 // VMODE must be set before this step is COMPLETE.
 [[ /TASK ]]
-
