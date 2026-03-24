@@ -60,7 +60,7 @@ The syntax highlighting works with any theme, but the SLOP themes use the exact 
 - `**bold**`, `*italic*`, `` `code` `` inline emphasis
 - `// comments`
 - Fenced code blocks with internal SLOP highlighting
-- Schema header block (`[[ SLOP v1.4 ]]` ... `[[ /SLOP v1.4 ]]`) with section labels
+- Schema header block (`[[ SLOP v1.5 ]]` ... `[[ /SLOP v1.5 ]]`) with section labels
 
 ## SLOP Spec
 
