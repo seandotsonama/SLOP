@@ -100,6 +100,7 @@ VMETRIC10         = []
 VMODE             = []
 VPROJECT_NUMBER   = []
 VPROJECT_TASK_ID  = []
+VTOTAL_SCORE      = []
 [[ /VARS ]]
 
 // Reviewer identity map. Do not display these values to the reviewer.
@@ -309,5 +310,30 @@ If content is confirmed non-empty, tell the reviewer:
 !GATE! If the fetched content is empty, null, or inaccessible: inform the reviewer that the document could not be loaded and !STOP!. Do not proceed to evaluation.
 
 // This sub-step is COMPLETE when the proposal content has been verified as non-empty and the reviewer has been notified.
+[[ /TASK ]]
+
+
+# STEP 4: Mode Selection
+
+|EXECUTE|
+
+[[ TASK ]]
+Present a `single_select` widget to the reviewer using `ask_user_input_v0`:
+
+Question: `"Which mode do you want to use for this evaluation?"`
+
+Options:
+- `"Normal Mode — I want to review all details of the venture."`
+- `"Express Mode — Skip summaries, just ask me to score."`
+- `"Insane Mode — AI determines all scores. (Dangerous!)"`
+
+!STOP! until the reviewer selects a mode.
+
+Once selected, map and store the value:
+- Normal Mode  → SET VMODE = 1
+- Express Mode → SET VMODE = 2
+- Insane Mode  → SET VMODE = 3
+
+// VMODE must be set before this step is COMPLETE.
 [[ /TASK ]]
 
