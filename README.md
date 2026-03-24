@@ -203,19 +203,33 @@ That is the difference between experimentation and production.
 
 ---
 
+## Color Legend
+
+Each SLOP syntax category is color-coded throughout this document for quick visual scanning.
+
+- ![#1589F0](https://placehold.co/15x15/1589F0/1589F0.png) Block delimiters `[[ BLOCK ]]`
+- ![#f03c15](https://placehold.co/15x15/f03c15/f03c15.png) Control keywords `!KEYWORD!`
+- ![#9B59B6](https://placehold.co/15x15/9B59B6/9B59B6.png) Mode declarations `|MODE|`
+- ![#2ECC71](https://placehold.co/15x15/2ECC71/2ECC71.png) Variable commands `SET / RECALL / DEFAULT:`
+- ![#E67E22](https://placehold.co/15x15/E67E22/E67E22.png) Variable references `{VAR_NAME}`
+- ![#95A5A6](https://placehold.co/15x15/95A5A6/95A5A6.png) Inline emphasis `**bold**` / `*italic*` / `` `backtick` ``
+- ![#F1C40F](https://placehold.co/15x15/F1C40F/F1C40F.png) Step declarations `# STEP N:`
+
+---
+
 ## Syntax Overview
 
-SLOP uses six visually distinct syntax conventions. Each maps to a different type of instruction.
+SLOP uses seven visually distinct syntax conventions. Each maps to a different type of instruction.
 
-| Convention | Syntax | Purpose |
-|---|---|---|
-| Block delimiters | [[ BLOCK ]] / [[ /BLOCK ]] | Wrap distinct sections of a prompt |
-| Control keywords | !KEYWORD! | Alter execution flow or set conditions |
-| Mode declarations | `\|MODE\|` | Set the model's operational posture |
-| Variable commands | `SET / RECALL / DEFAULT:` | Manage session state |
-| Variable references | `{VAR_NAME}` | Substitute named values inline |
-| Inline emphasis | `**bold**` / `*italic*` / `` `backtick` `` | Signal priority within any block |
-| Step declarations | `# STEP N: [title]` | Define ordered execution units |
+| | Convention | Syntax | Purpose |
+|---|---|---|---|
+| ![#1589F0](https://placehold.co/15x15/1589F0/1589F0.png) | Block delimiters | `[[ BLOCK ]] / [[ /BLOCK ]]` | Wrap distinct sections of a prompt |
+| ![#f03c15](https://placehold.co/15x15/f03c15/f03c15.png) | Control keywords | `!KEYWORD!` | Alter execution flow or set conditions |
+| ![#9B59B6](https://placehold.co/15x15/9B59B6/9B59B6.png) | Mode declarations | `\|MODE\|` | Set the model's operational posture |
+| ![#2ECC71](https://placehold.co/15x15/2ECC71/2ECC71.png) | Variable commands | `SET / RECALL / DEFAULT:` | Manage session state |
+| ![#E67E22](https://placehold.co/15x15/E67E22/E67E22.png) | Variable references | `{VAR_NAME}` | Substitute named values inline |
+| ![#95A5A6](https://placehold.co/15x15/95A5A6/95A5A6.png) | Inline emphasis | `**bold**` / `*italic*` / `` `backtick` `` | Signal priority within any block |
+| ![#F1C40F](https://placehold.co/15x15/F1C40F/F1C40F.png) | Step declarations | `# STEP N: [title]` | Define ordered execution units |
 
 ---
 
@@ -298,46 +312,46 @@ VARIABLE REFERENCES
 
 ---
 
-## Block Delimiters
+## ![#1589F0](https://placehold.co/15x15/1589F0/1589F0.png) Block Delimiters
 
 Blocks create explicit boundaries between different types of content. This prevents the model
 from mixing instructions with data, or context with constraints.
 
-The closing tag uses a forward slash: [[ /BLOCK ]]
+The closing tag uses a forward slash: `[[ /BLOCK ]]`
 
-| Block | Purpose |
-|---|---|
-| [[ VARS ]] | Session variable definitions. Always loaded first. |
-| [[ ROLE ]] | Persona, expertise level, or perspective to adopt. |
-| [[ TASK ]] | The specific action to perform. One task per block preferred. |
-| [[ CONSTRAINTS ]] | Hard limits. These override TASK instructions if there is conflict. |
-| [[ INPUT ]] | Raw material: text, data, code, documents, paste content. |
-| [[ OUTPUT-FORMAT ]] | Structure, length, and style of the response. |
-| [[ EXAMPLE ]] | Reference sample. Do not execute. Model the output after this. |
-| [[ NOTE ]] | Low-weight background context. Apply if relevant, do not prioritize. |
-| [[ SLOP v1.2 ]] | Schema header. Contains the full rule set for the session. |
+| | Block | Purpose |
+|---|---|---|
+| ![#1589F0](https://placehold.co/15x15/1589F0/1589F0.png) | `[[ VARS ]]` | Session variable definitions. Always loaded first. |
+| ![#1589F0](https://placehold.co/15x15/1589F0/1589F0.png) | `[[ ROLE ]]` | Persona, expertise level, or perspective to adopt. |
+| ![#1589F0](https://placehold.co/15x15/1589F0/1589F0.png) | `[[ TASK ]]` | The specific action to perform. One task per block preferred. |
+| ![#1589F0](https://placehold.co/15x15/1589F0/1589F0.png) | `[[ CONSTRAINTS ]]` | Hard limits. These override TASK instructions if there is conflict. |
+| ![#1589F0](https://placehold.co/15x15/1589F0/1589F0.png) | `[[ INPUT ]]` | Raw material: text, data, code, documents, paste content. |
+| ![#1589F0](https://placehold.co/15x15/1589F0/1589F0.png) | `[[ OUTPUT-FORMAT ]]` | Structure, length, and style of the response. |
+| ![#1589F0](https://placehold.co/15x15/1589F0/1589F0.png) | `[[ EXAMPLE ]]` | Reference sample. Do not execute. Model the output after this. |
+| ![#1589F0](https://placehold.co/15x15/1589F0/1589F0.png) | `[[ NOTE ]]` | Low-weight background context. Apply if relevant, do not prioritize. |
+| ![#1589F0](https://placehold.co/15x15/1589F0/1589F0.png) | `[[ SLOP v1.2 ]]` | Schema header. Contains the full rule set for the session. |
 
 ---
 
-## Control Keywords
+## ![#f03c15](https://placehold.co/15x15/f03c15/f03c15.png) Control Keywords
 
 Control keywords alter execution flow. They are always written in uppercase wrapped in
 exclamation marks. They can appear inside any block or as standalone lines.
 
-| Keyword | Behavior |
-|---|---|
-| !STOP! | Halt execution if a condition is not met. Report why. |
-| !GATE! | Pause and ask the user to resolve a condition before continuing. |
-| !GATE! GOTO: STEP N | If the gate condition is met, jump to the specified step. All skipped steps are marked BYPASSED. |
-| !CONFIRM! | Pause and ask the user to explicitly approve before proceeding. |
-| !ASSUME! | Declare something true to prevent unnecessary clarification questions. |
-| !LOOP! | Repeat the enclosing block on each pass until !DONE! or a !GATE! is met. |
-| !DONE! | Terminate an active !LOOP!. |
-| !IGNORE! | Suppress a default model behavior for this session. |
+| | Keyword | Behavior |
+|---|---|---|
+| ![#f03c15](https://placehold.co/15x15/f03c15/f03c15.png) | `!STOP!` | Halt execution if a condition is not met. Report why. |
+| ![#f03c15](https://placehold.co/15x15/f03c15/f03c15.png) | `!GATE!` | Pause and ask the user to resolve a condition before continuing. |
+| ![#f03c15](https://placehold.co/15x15/f03c15/f03c15.png) | `!GATE! GOTO: STEP N` | If the gate condition is met, jump to the specified step. All skipped steps are marked BYPASSED. |
+| ![#f03c15](https://placehold.co/15x15/f03c15/f03c15.png) | `!CONFIRM!` | Pause and ask the user to explicitly approve before proceeding. |
+| ![#f03c15](https://placehold.co/15x15/f03c15/f03c15.png) | `!ASSUME!` | Declare something true to prevent unnecessary clarification questions. |
+| ![#f03c15](https://placehold.co/15x15/f03c15/f03c15.png) | `!LOOP!` | Repeat the enclosing block on each pass until `!DONE!` or a `!GATE!` is met. |
+| ![#f03c15](https://placehold.co/15x15/f03c15/f03c15.png) | `!DONE!` | Terminate an active `!LOOP!`. |
+| ![#f03c15](https://placehold.co/15x15/f03c15/f03c15.png) | `!IGNORE!` | Suppress a default model behavior for this session. |
 
 ---
 
-## Step System
+## ![#F1C40F](https://placehold.co/15x15/F1C40F/F1C40F.png) Step System
 
 ### Purpose
 
@@ -363,12 +377,12 @@ A short descriptive title should follow the step number.
 
 Each step carries one of four states at any point in the session.
 
-| State | Meaning |
-|---------|---|
-| PENDING | Not yet started. Waiting for prior steps to complete. |
-| ACTIVE | Currently executing. Conditions not yet fully satisfied. |
-| COMPLETE | All conditions satisfied. Ready to advance to the next step. |
-| BYPASSED | Skipped via !GATE! GOTO:. Resumable by explicit instruction. |
+| | State | Meaning |
+|---|---------|---|
+| ![#F1C40F](https://placehold.co/15x15/F1C40F/F1C40F.png) | PENDING | Not yet started. Waiting for prior steps to complete. |
+| ![#F1C40F](https://placehold.co/15x15/F1C40F/F1C40F.png) | ACTIVE | Currently executing. Conditions not yet fully satisfied. |
+| ![#F1C40F](https://placehold.co/15x15/F1C40F/F1C40F.png) | COMPLETE | All conditions satisfied. Ready to advance to the next step. |
+| ![#F1C40F](https://placehold.co/15x15/F1C40F/F1C40F.png) | BYPASSED | Skipped via `!GATE! GOTO:`. Resumable by explicit instruction. |
 
 The model should track and report the current state of each step when asked, or when a
 state change occurs.
@@ -377,15 +391,13 @@ state change occurs.
 
 - Steps must be executed in order: STEP 1, STEP 2, STEP 3, and so on.
 - You may not advance to the next step until the current step is marked COMPLETE.
-- A step is COMPLETE when all conditions, tasks, !GATE! checks, and !CONFIRM! approvals
-  within it have been satisfied.
-- You may not skip a step except via an explicit !GATE! GOTO: STEP N instruction.
-- If a step contains a !STOP! condition that evaluates to false, the step cannot be marked
-  COMPLETE until the condition is resolved.
+- A step is COMPLETE when all conditions, tasks, ![#f03c15](https://placehold.co/15x15/f03c15/f03c15.png) `!GATE!` checks, and ![#f03c15](https://placehold.co/15x15/f03c15/f03c15.png) `!CONFIRM!` approvals within it have been satisfied.
+- You may not skip a step except via an explicit ![#f03c15](https://placehold.co/15x15/f03c15/f03c15.png) `!GATE! GOTO: STEP N` instruction.
+- If a step contains a ![#f03c15](https://placehold.co/15x15/f03c15/f03c15.png) `!STOP!` condition that evaluates to false, the step cannot be marked COMPLETE until the condition is resolved.
 
-### Non-Sequential Jumps via !GATE! GOTO:
+### Non-Sequential Jumps via ![#f03c15](https://placehold.co/15x15/f03c15/f03c15.png) `!GATE! GOTO:`
 
-A !GATE! GOTO: instruction inside a step can redirect execution to any other step when
+A ![#f03c15](https://placehold.co/15x15/f03c15/f03c15.png) `!GATE! GOTO:` instruction inside a step can redirect execution to any other step when
 a condition is met. This is the only mechanism for non-sequential step execution.
 
 All steps between the current step and the destination step are marked BYPASSED.
@@ -438,24 +450,24 @@ STEP 5: Client Presentation     [ACTIVE]
 
 ---
 
-## Mode Declarations
+## ![#9B59B6](https://placehold.co/15x15/9B59B6/9B59B6.png) Mode Declarations
 
 Mode declarations set the model's operational posture for the session or task. Declare one
 as a standalone line anywhere in the prompt. The most recent declaration takes effect.
-Default is |EXECUTE| if none is declared.
+Default is `|EXECUTE|` if none is declared.
 
-| Mode | Behavior |
-|---|---|
-| |EXECUTE| | Perform the task. Minimal explanation unless the output requires it. |
-| |PLAN| | Produce a plan or outline only. Do not produce the deliverable. |
-| |REVIEW|  | Critique only. Do not rewrite unless explicitly asked. |
-| |ITERATE| | Expect multiple passes. Track and reference prior outputs. |
-| |EXPLAIN| | Prioritize explanation over deliverable. |
-| |DRAFT| | Produce a clearly marked first-pass output for review. |
+| | Mode | Behavior |
+|---|---|---|
+| ![#9B59B6](https://placehold.co/15x15/9B59B6/9B59B6.png) | `\|EXECUTE\|` | Perform the task. Minimal explanation unless the output requires it. |
+| ![#9B59B6](https://placehold.co/15x15/9B59B6/9B59B6.png) | `\|PLAN\|` | Produce a plan or outline only. Do not produce the deliverable. |
+| ![#9B59B6](https://placehold.co/15x15/9B59B6/9B59B6.png) | `\|REVIEW\|` | Critique only. Do not rewrite unless explicitly asked. |
+| ![#9B59B6](https://placehold.co/15x15/9B59B6/9B59B6.png) | `\|ITERATE\|` | Expect multiple passes. Track and reference prior outputs. |
+| ![#9B59B6](https://placehold.co/15x15/9B59B6/9B59B6.png) | `\|EXPLAIN\|` | Prioritize explanation over deliverable. |
+| ![#9B59B6](https://placehold.co/15x15/9B59B6/9B59B6.png) | `\|DRAFT\|` | Produce a clearly marked first-pass output for review. |
 
 ---
 
-## Variable System
+## ![#2ECC71](https://placehold.co/15x15/2ECC71/2ECC71.png) Variable System
 
 Variables give the model persistent named values to reference across a session without
 requiring the user to repeat information. They also allow prompts to be reused as templates
@@ -463,19 +475,19 @@ by swapping variable values.
 
 ### Commands
 
-| Command | Purpose |
-|---|---|
-| `SET [VAR] = [value]` | Store a named value for the session. |
-| `RECALL [VAR]` | Read and apply the current value of the named variable. |
-| `DEFAULT: [VAR] = [value]` | Use this value if the variable has not been explicitly set. |
+| | Command | Purpose |
+|---|---|---|
+| ![#2ECC71](https://placehold.co/15x15/2ECC71/2ECC71.png) | `SET [VAR] = [value]` | Store a named value for the session. |
+| ![#2ECC71](https://placehold.co/15x15/2ECC71/2ECC71.png) | `RECALL [VAR]` | Read and apply the current value of the named variable. |
+| ![#2ECC71](https://placehold.co/15x15/2ECC71/2ECC71.png) | `DEFAULT: [VAR] = [value]` | Use this value if the variable has not been explicitly set. |
 
 ### Variable Types
 
-| Type | Description |
-|---|---|
-| Static | Set once, used throughout. |
-| Dynamic | Updated mid-session with SET. New value applies immediately. |
-| Computed | Derived from other variables. References other {VAR_NAME} values. |
+| | Type | Description |
+|---|---|---|
+| ![#2ECC71](https://placehold.co/15x15/2ECC71/2ECC71.png) | Static | Set once, used throughout. |
+| ![#2ECC71](https://placehold.co/15x15/2ECC71/2ECC71.png) | Dynamic | Updated mid-session with `SET`. New value applies immediately. |
+| ![#2ECC71](https://placehold.co/15x15/2ECC71/2ECC71.png) | Computed | Derived from other variables. References other ![#E67E22](https://placehold.co/15x15/E67E22/E67E22.png) `{VAR_NAME}` values. |
 
 ### Variable Block
 
@@ -491,9 +503,9 @@ MAX_LENGTH    = 600
 [[ /VARS ]]
 ```
 
-### Inline Reference
+### ![#E67E22](https://placehold.co/15x15/E67E22/E67E22.png) Inline Reference
 
-Use {VAR_NAME} anywhere in a prompt or block to substitute the current value.
+Use ![#E67E22](https://placehold.co/15x15/E67E22/E67E22.png) `{VAR_NAME}` anywhere in a prompt or block to substitute the current value.
 
 ```
 Draft a summary for {CLIENT} describing the ROI case for robotic palletizing.
@@ -502,7 +514,7 @@ Tone: {TONE}. Audience: {AUDIENCE}. Length: {MAX_LENGTH}.
 
 ### Dynamic Update
 
-Call SET at any point mid-session to change a variable. All subsequent references
+Call ![#2ECC71](https://placehold.co/15x15/2ECC71/2ECC71.png) `SET` at any point mid-session to change a variable. All subsequent references
 to that variable will use the new value.
 
 ```
@@ -512,13 +524,13 @@ SET AUDIENCE = plant floor operators
 
 ---
 
-## Inline Emphasis
+## ![#95A5A6](https://placehold.co/15x15/95A5A6/95A5A6.png) Inline Emphasis
 
-| Marker | Meaning | Use For |
-|---|---|---|
-| **bold** | Hard requirement. Non-negotiable. | Compliance rules, format mandates, critical outputs. |
-| *italic* | Soft guidance. Apply unless overridden. | Tone suggestions, style preferences, context notes. |
-| `backtick` | Literal string. Reproduce exactly. | Variable names, file paths, required output strings. |
+| | Marker | Meaning | Use For |
+|---|---|---|---|
+| ![#95A5A6](https://placehold.co/15x15/95A5A6/95A5A6.png) | `**bold**` | Hard requirement. Non-negotiable. | Compliance rules, format mandates, critical outputs. |
+| ![#95A5A6](https://placehold.co/15x15/95A5A6/95A5A6.png) | `*italic*` | Soft guidance. Apply unless overridden. | Tone suggestions, style preferences, context notes. |
+| ![#95A5A6](https://placehold.co/15x15/95A5A6/95A5A6.png) | `` `backtick` `` | Literal string. Reproduce exactly. | Variable names, file paths, required output strings. |
 
 ---
 
@@ -526,7 +538,7 @@ SET AUDIENCE = plant floor operators
 
 | Level | Syntax | Weight | Use For |
 |---|---|---|---|
-| H1 | `#` | Highest | STEP declarations and session-level directives |
+| H1 | `#` | Highest | ![#F1C40F](https://placehold.co/15x15/F1C40F/F1C40F.png) STEP declarations and session-level directives |
 | H2 | `##` | High | Major task phase or top-level section within a step |
 | H3 | `###` | Medium | Sub-task, parameter definition, conditional rule |
 | H4 | `####` | Low | Example, clarification, optional detail |
@@ -596,20 +608,17 @@ MAX_LENGTH    =
 |---|---|---|
 | Claude Sonnet / Opus | Excellent | XML-adjacent syntax parses cleanly. Block hierarchy, control keywords, and step tracking reliable. |
 | GPT-4o | Good | Respects block structure. Control keywords and variable substitution reliable. Step state tracking generally solid. |
-| GPT-4-turbo | Good | Similar to GPT-4o. Occasional drift on !LOOP! and step state across long sessions. |
+| GPT-4-turbo | Good | Similar to GPT-4o. Occasional drift on ![#f03c15](https://placehold.co/15x15/f03c15/f03c15.png) `!LOOP!` and step state across long sessions. |
 | Gemini 1.5 Pro | Moderate | Follows structure generally. Step state tracking less consistent without explicit STATUS calls. |
 | Llama 3 / Mistral | Variable | Smaller models may lose step state across long sessions. Recommend explicit STATUS calls at each step boundary. |
 | Local / fine-tuned | Unknown | Validate manually. Step state tracking is the most likely failure point on smaller models. |
 
 ### Known Limitations
 
-- Variables do not persist across separate sessions. Each session requires a fresh VARS block.
-- Step state is held in the model's context window. Very long sessions may cause state drift
-  on smaller models. Use STATUS calls to force re-evaluation if behavior seems inconsistent.
-- !LOOP! behavior depends on the model's ability to track iteration state. Use explicit
-  !GATE! conditions for better reliability on smaller models.
-- In multi-agent systems, include the schema header in each agent's system prompt individually
-  rather than assuming it propagates across agents.
+- Variables do not persist across separate sessions. Each session requires a fresh ![#1589F0](https://placehold.co/15x15/1589F0/1589F0.png) `[[ VARS ]]` block.
+- Step state is held in the model's context window. Very long sessions may cause state drift on smaller models. Use STATUS calls to force re-evaluation if behavior seems inconsistent.
+- ![#f03c15](https://placehold.co/15x15/f03c15/f03c15.png) `!LOOP!` behavior depends on the model's ability to track iteration state. Use explicit ![#f03c15](https://placehold.co/15x15/f03c15/f03c15.png) `!GATE!` conditions for better reliability on smaller models.
+- In multi-agent systems, include the schema header in each agent's system prompt individually rather than assuming it propagates across agents.
 
 ---
 
@@ -618,8 +627,8 @@ MAX_LENGTH    =
 | Version | Date | Changes |
 |---|---|---|
 | v1.0 | 2026-03-23 | Initial release as SPL. Core schema, variable system, control keywords, execution modes, block types. |
-| v1.1 | 2026-03-23 | Renamed to SLOP (Simple Language of Prompting). Control keywords wrapped in !KEYWORD!. Mode declarations changed to `\|MODE\|` with no prefix. Double brackets retained for blocks. |
-| v1.2 | 2026-03-23 | Added STEP system. Sequential execution units with four states: PENDING, ACTIVE, COMPLETE, BYPASSED. Added !GATE! GOTO: for non-sequential jumps. Added RESUME command with THEN GOTO: and THEN CONTINUE options. Added STATUS command for step state reporting. |
+| v1.1 | 2026-03-23 | Renamed to SLOP (Simple Language of Prompting). Control keywords wrapped in `!KEYWORD!`. Mode declarations changed to `\|MODE\|` with no prefix. Double brackets retained for blocks. |
+| v1.2 | 2026-03-23 | Added STEP system. Sequential execution units with four states: PENDING, ACTIVE, COMPLETE, BYPASSED. Added ![#f03c15](https://placehold.co/15x15/f03c15/f03c15.png) `!GATE! GOTO:` for non-sequential jumps. Added RESUME command with THEN GOTO: and THEN CONTINUE options. Added STATUS command for step state reporting. |
 
 ---
 
