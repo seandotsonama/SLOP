@@ -566,3 +566,100 @@ Then re-ask: `"Do you want to make any changes?"`
 // This sub-step is COMPLETE when the reviewer confirms they are satisfied.
 [[ /TASK ]]
 
+
+# STEP 7: Save Results
+
+|EXECUTE|
+
+// STEP 7 is COMPLETE only when both sub-steps (7.1, 7.2) are COMPLETE.
+
+
+# STEP 7.1: Write Score to ClickUp
+
+[[ TASK ]]
+!CONFIRM! Before writing, confirm with the reviewer:
+`"Ready to save your score of {VTOTAL_SCORE}/50 to ClickUp for {VPROJECT_NUMBER}. Confirm?"`
+
+!STOP! until the reviewer confirms.
+
+Once confirmed, use `clickup_update_task` to write the total score to the reviewer's custom field:
+
+```
+task_id: RECALL [VPROJECT_TASK_ID]
+custom_fields: [
+  {
+    id: RECALL [REVIEWER_FIELD_ID],
+    value: RECALL [VTOTAL_SCORE]
+  }
+]
+```
+
+### If the write succeeds:
+
+Confirm to the reviewer: `"Score of {VTOTAL_SCORE}/50 saved to ClickUp for {VPROJECT_NUMBER}."`
+
+### If the write fails:
+
+Report the error to the reviewer and ask: `"Would you like to retry?"`
+
+Present a `single_select` widget using `ask_user_input_v0`:
+
+Options:
+- `"Retry"`
+- `"Skip and continue"`
+
+If retry: re-attempt the `clickup_update_task` call.
+If skip: inform the reviewer the score was not saved and proceed.
+
+// This sub-step is COMPLETE when the write has succeeded or the reviewer has chosen to skip.
+[[ /TASK ]]
+
+
+# STEP 7.2: Review Another or Quit
+
+[[ TASK ]]
+Ask the reviewer what they want to do next.
+
+Present a `single_select` widget using `ask_user_input_v0`:
+
+Question: `"Do you want to review another venture or quit?"`
+
+Options:
+- `"Review Another Venture"`
+- `"Quit"`
+
+!STOP! until the reviewer selects an option.
+
+### If "Review Another Venture"
+
+Reset the following variables for the next evaluation:
+SET [VMETRIC1]         = []
+SET [VMETRIC2]         = []
+SET [VMETRIC3]         = []
+SET [VMETRIC4]         = []
+SET [VMETRIC5]         = []
+SET [VMETRIC6]         = []
+SET [VMETRIC7]         = []
+SET [VMETRIC8]         = []
+SET [VMETRIC9]         = []
+SET [VMETRIC10]        = []
+SET [VMODE]            = []
+SET [VPROJECT_NUMBER]  = []
+SET [VPROJECT_TASK_ID] = []
+SET [VTOTAL_SCORE]     = []
+
+// REVIEWER_NAME, REVIEWER_EMAIL, and REVIEWER_FIELD_ID are retained.
+// The same reviewer continues without re-identifying.
+
+!GATE! GOTO: STEP 2
+
+// STEP 2 through STEP 7 will re-execute with the same reviewer.
+// STEP 1 remains COMPLETE and is not re-entered.
+
+### If "Quit"
+
+State: `"Session complete. Thank you, {REVIEWER_NAME}."`
+
+// This sub-step is COMPLETE. Session ends.
+[[ /TASK ]]
+
